@@ -18,7 +18,11 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // golpear
-            Debug.Log("Tecla presionada");
+            if (GameManager.Instance.BallCreated)
+            {
+                Debug.Log("Pelota/bomba golpeada");
+                GameManager.Instance.BallHit = true;
+            }
         }
     }
 }

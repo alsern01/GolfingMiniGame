@@ -8,33 +8,32 @@ public class BallBombSpawner : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
-        GenerateObject();
+    {
+        //GenerateObject();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.Instance.BallCreated)
+        {
+            Invoke("GenerateObject", 1.0f);
+            GameManager.Instance.BallCreated = true;
+        }
     }
 
     private void GenerateObject()
     {
-        // Spawnea pelota
-        if (Random.Range(0, 10) > 8)
+        if (Random.Range(0.0f, 1.0f) > 0.2f)
         {
-            ball.transform.position = this.transform.position;
-            Instantiate(ball);
+            // Spawnea pelota
+            Instantiate(ball, this.transform.position, Quaternion.identity);
         }
-        else // Spawnea bomba
+        else
         {
-            bomb.transform.position = this.transform.position;
-            GameObject instance = Instantiate (bomb);
-            HideBomb (instance);
+            // Spawnea bomba
+            GameObject instance = Instantiate(bomb, this.transform.position, Quaternion.identity);
         }
     }
 
-    private void HideBomb(GameObject bomb)
-    {
-        Destroy(bomb, 5);
-    }
 }
