@@ -15,10 +15,13 @@ public class BallBombSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.Instance.BallCreated)
+        if (GameManager.Instance.clientConnected) // Solo empieza a generar objetos cuando haya un cliente conectado
         {
-            Invoke("GenerateObject", 1.0f);
-            GameManager.Instance.BallCreated = true;
+            if (!GameManager.Instance.ballCreated)
+            {
+                Invoke("GenerateObject", 1.0f);
+                GameManager.Instance.ballCreated = true;
+            }
         }
     }
 

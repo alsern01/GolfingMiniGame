@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,16 +9,21 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get { return _instance; } }
 
-    public bool BallCreated { get; set; }
-    public bool BallHit { get; set; }
+    public bool ballCreated { get; set; }
+    public bool ballHit { get; set; }
 
     private int _score;
+    [SerializeField] private TextMeshProUGUI _scoreText;
+
+    public bool clientConnected { get; private set; }
+
 
     private void Awake()
     {
         if (_instance == null)
         {
             _instance = this;
+            clientConnected = true; // cambiar a false
             DontDestroyOnLoad(_instance);
         }
         else
@@ -29,12 +35,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (NetworkManager.Instance.Server.ClientCount >= 1)
+        {
+            clientConnected = true;
+        }
     }
 
     public void AddPoints(int numPoints)
     {
         _score += numPoints;
+        _scoreText.SetText($"Score: {_score}");
     }
 
     public int GetScore()

@@ -15,13 +15,14 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // if(GameManager.Instance.clientConnected) { } // Solo detecta el Input cuando haya un cliente conectado
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // golpear
-            if (GameManager.Instance.BallCreated)
+            if (GameManager.Instance.ballCreated)
             {
                 Debug.Log("Pelota/bomba golpeada");
-                GameManager.Instance.BallHit = true;
+                GameManager.Instance.ballHit = true;
             }
         }
     }

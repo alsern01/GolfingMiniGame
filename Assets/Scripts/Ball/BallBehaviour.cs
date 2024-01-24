@@ -15,18 +15,16 @@ public class BallBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.BallHit)
+        if (GameManager.Instance.ballHit)
         {
             Destroy(this.gameObject);
             GameManager.Instance.AddPoints(pointsGiven);
-            GameManager.Instance.BallHit = false;
-
-            Debug.Log("Score: " + GameManager.Instance.GetScore());
+            GameManager.Instance.ballHit = false;
         }
     }
 
     private void OnDestroy()
     {
-        GameManager.Instance.BallCreated = false;
+        GameManager.Instance.ballCreated = false;
     }
 }
