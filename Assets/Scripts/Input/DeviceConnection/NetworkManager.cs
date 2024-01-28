@@ -3,6 +3,11 @@ using Riptide.Utils;
 using UnityEngine;
 using System.Net;
 
+public enum MessageID
+{
+    orientation = 1,
+}
+
 public class NetworkManager : MonoBehaviour
 {
     private static NetworkManager instance;
@@ -26,6 +31,8 @@ public class NetworkManager : MonoBehaviour
     public Server Server { get; private set; }
 
     public string ipAddress { get; private set; }
+
+    public static Vector3 orientation { get; private set; }
 
     [SerializeField] private ushort port;
     [SerializeField] private ushort maxClientCount;
@@ -54,6 +61,17 @@ public class NetworkManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         Server.Stop();
+    }
+
+    [MessageHandler((ushort)MessageID.orientation)]
+    private static void ReceiveMesageFromDevice(ushort fromClientId, Message message)
+    {
+        orientation = message.GetVector3();
+    }
+
+    public Vector3 getDeviceOrientation()
+    {
+        return orientation;
     }
 
     private string GetLocalIPAddress()
