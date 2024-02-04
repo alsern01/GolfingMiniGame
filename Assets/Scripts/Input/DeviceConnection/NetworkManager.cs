@@ -51,6 +51,7 @@ public class NetworkManager : MonoBehaviour
 
         Server = new Server();
         Server.Start(port, maxClientCount);
+
     }
 
     private void FixedUpdate()

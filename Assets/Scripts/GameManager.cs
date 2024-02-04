@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            clientConnected = true; // cambiar a false
+            clientConnected = false;
             DontDestroyOnLoad(_instance);
         }
         else
