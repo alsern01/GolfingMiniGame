@@ -1,4 +1,0 @@
-repository "GolfingMiniGame@TFGRehabilitacion2324@cloud"
-  path "/"
-    br "/main"
-    co "/main"
