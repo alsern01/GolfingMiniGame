@@ -5,6 +5,8 @@ using UnityEngine;
 public class BallBombSpawner : MonoBehaviour
 {
     public GameObject ball, bomb;
+    
+    [SerializeField] public Score score;
 
     // Start is called before the first frame update
     void Start()
@@ -31,11 +33,13 @@ public class BallBombSpawner : MonoBehaviour
         {
             // Spawnea pelota
             Instantiate(ball, this.transform.position, Quaternion.identity);
+            score.SumarPuntos(20);
         }
         else
         {
             // Spawnea bomba
             GameObject instance = Instantiate(bomb, this.transform.position, Quaternion.identity);
+            score.RestarPuntos(10);
         }
     }
 
