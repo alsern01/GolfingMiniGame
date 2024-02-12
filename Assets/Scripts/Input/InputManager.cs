@@ -6,19 +6,42 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-    public float angleToReach = 60f;
+    public float angleToReach = 10f;
     public float minAngleOffset = 10f; // Ajusta según sea necesario
     private bool movementDone = false;
+    private bool movementComplete = false;
+
 
     private Vector3 accel = Vector3.zero;
 
-    // Start is called before the first frame update
+    private static InputManager instance;
+    public static InputManager Instance
+    {
+
+        get { return instance; }
+        private set
+        {
+            if (instance == null)
+            {
+                instance = value;
+            }
+            else if (instance != value)
+            {
+                Destroy(value);
+            }
+        }
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (GameManager.Instance.clientConnected)
@@ -33,12 +56,6 @@ public class InputManager : MonoBehaviour
                 }
             }
 
-            // Vector3 accel = Input.acceleration;
-
-            accel.x++;
-            accel.y++;
-            accel.z++;
-
             // Invierte los ejes para tener en cuenta la orientación del dispositivo
             float variationX = Mathf.Atan2(accel.z, accel.y) * Mathf.Rad2Deg;
 
@@ -51,24 +68,37 @@ public class InputManager : MonoBehaviour
             // Comprueba si la inclinación supera el umbral y la acción aún no se ha ejecutado
             if (movementPercent >= 1f && !movementDone)
             {
-                movementDone = true;
+                // Marca el movimiento como realizado solo si el dispositivo ha vuelto cerca de la posición inicial
+                if (Mathf.Abs(variationX) < minAngleOffset)
+                {
+                    movementDone = true;
+                    Debug.Log("¡Movimiento realizado!");
+                }
             }
-            else if (movementPercent < 1f && Mathf.Abs(variationX) < minAngleOffset)
+            else if (Mathf.Abs(variationX) <= minAngleOffset && movementDone && !movementComplete)
             {
+                // Ejecuta tu acción aquí
+                DoSomething();
+
+                // Marca la acción como ejecutada para evitar repeticiones
+                movementComplete = true;
+
                 // Reinicia la marca de la acción si la inclinación vuelve cerca de cero
                 movementDone = false;
             }
 
-            // Ejecuta la acción cuando el dispositivo vuelva a la posición inicial después de la inclinación
-            if (movementDone && Mathf.Abs(variationX) < minAngleOffset)
+            if (!movementDone && movementComplete)
             {
-                // Ejecuta tu acción aquí
-                DoSomething();
-                movementDone = false;
+                // Reinicia el estado de la acción si el movimiento no se ha completado
+                movementComplete = false;
             }
 
-            //Debug.Log($"Orientatcion actual: {NetworkManager.Instance.getDeviceOrientation()}");
         }
+    }
+
+    public void SetAccelVector(Vector3 orientation)
+    {
+        accel = orientation;
     }
 
     void DoSomething()
