@@ -6,11 +6,10 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-    public float angleToReach = 10f;
-    public float minAngleOffset = 10f; // Ajusta según sea necesario
-    private bool movementDone = false;
-    private bool movementComplete = false;
+    public float minAngleOffset;
 
+    private float angleToReach = 30f;
+    private bool movementDone = false;
 
     private Vector3 accel = Vector3.zero;
 
@@ -56,44 +55,37 @@ public class InputManager : MonoBehaviour
                 }
             }
 
-            // Invierte los ejes para tener en cuenta la orientación del dispositivo
-            float variationX = Mathf.Atan2(accel.z, accel.y) * Mathf.Rad2Deg;
 
-            // Calcula el porcentaje del movimiento
-            float movementPercent = Mathf.Clamp01(Mathf.Abs(variationX) / angleToReach);
-
-            // Actualiza la barra de UI
+            float currentInclination = CalculateInclination();
+            float movementPercent = Mathf.Clamp01(currentInclination / angleToReach);
             UIManager.Instance.UpdateSlider(movementPercent);
 
-            // Comprueba si la inclinación supera el umbral y la acción aún no se ha ejecutado
-            if (movementPercent >= 1f && !movementDone)
+            if (currentInclination >= angleToReach && !movementDone)
             {
-                // Marca el movimiento como realizado solo si el dispositivo ha vuelto cerca de la posición inicial
-                if (Mathf.Abs(variationX) < minAngleOffset)
-                {
-                    movementDone = true;
-                    Debug.Log("¡Movimiento realizado!");
-                }
+                Debug.Log($"INPUT MANAGER: Inclination angle -> {currentInclination}");
+                movementDone = true;
+                Debug.Log("INPUT MANAGER: Angulo maximo alcanzado");
             }
-            else if (Mathf.Abs(variationX) <= minAngleOffset && movementDone && !movementComplete)
+
+
+            if (movementDone && currentInclination <= minAngleOffset)
             {
-                // Ejecuta tu acción aquí
-                DoSomething();
-
-                // Marca la acción como ejecutada para evitar repeticiones
-                movementComplete = true;
-
-                // Reinicia la marca de la acción si la inclinación vuelve cerca de cero
                 movementDone = false;
-            }
-
-            if (!movementDone && movementComplete)
-            {
-                // Reinicia el estado de la acción si el movimiento no se ha completado
-                movementComplete = false;
+                Debug.Log("INPUT MANAGER: Vuelta a la posicion inicial");
+                DoSomething();
             }
 
         }
+    }
+
+    private float CalculateInclination()
+    {
+        Vector3 acceleration = accel;
+        // Z - AXIS
+        float inclinationRadians = Mathf.Atan2(acceleration.z, Mathf.Sqrt(acceleration.x * acceleration.x + acceleration.y * acceleration.y));
+        // X - AXIS
+        //float inclinationRadians = Mathf.Atan2(acceleration.x, Mathf.Sqrt(acceleration.z * acceleration.z + acceleration.y * acceleration.y)) 
+        return Mathf.Abs(inclinationRadians * Mathf.Rad2Deg);
     }
 
     public void SetAccelVector(Vector3 orientation)
@@ -101,10 +93,14 @@ public class InputManager : MonoBehaviour
         accel = orientation;
     }
 
-    void DoSomething()
+    private void DoSomething()
     {
-        // Coloca aquí la lógica de la acción que deseas ejecutar
-        Debug.Log("¡Acción ejecutada!");
+        // golpear
+        if (GameManager.Instance.ballCreated)
+        {
+            Debug.Log("Pelota/bomba golpeada");
+            GameManager.Instance.ballHit = true;
+        }
     }
 }
 
