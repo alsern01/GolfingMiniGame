@@ -6,21 +6,43 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-    public float angleToReach = 60f;
-    public float minAngleOffset = 10f; // Ajusta según sea necesario
+    public float minAngleOffset;
+
+    private float angleToReach = 30f;
     private bool movementDone = false;
     public MenuPausa menuPausa;
 
 
     private Vector3 accel = Vector3.zero;
 
-    // Start is called before the first frame update
+    private static InputManager instance;
+    public static InputManager Instance
+    {
+
+        get { return instance; }
+        private set
+        {
+            if (instance == null)
+            {
+                instance = value;
+            }
+            else if (instance != value)
+            {
+                Destroy(value);
+            }
+        }
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(menuPausa != null && menuPausa.enPausa)
@@ -41,48 +63,52 @@ public class InputManager : MonoBehaviour
                 }
             }
 
-            // Vector3 accel = Input.acceleration;
 
-            accel.x++;
-            accel.y++;
-            accel.z++;
-
-            // Invierte los ejes para tener en cuenta la orientación del dispositivo
-            float variationX = Mathf.Atan2(accel.z, accel.y) * Mathf.Rad2Deg;
-
-            // Calcula el porcentaje del movimiento
-            float movementPercent = Mathf.Clamp01(Mathf.Abs(variationX) / angleToReach);
-
-            // Actualiza la barra de UI
+            float currentInclination = CalculateInclination();
+            float movementPercent = Mathf.Clamp01(currentInclination / angleToReach);
             UIManager.Instance.UpdateSlider(movementPercent);
 
-            // Comprueba si la inclinación supera el umbral y la acción aún no se ha ejecutado
-            if (movementPercent >= 1f && !movementDone)
+            if (currentInclination >= angleToReach && !movementDone)
             {
+                Debug.Log($"INPUT MANAGER: Inclination angle -> {currentInclination}");
                 movementDone = true;
-            }
-            else if (movementPercent < 1f && Mathf.Abs(variationX) < minAngleOffset)
-            {
-                // Reinicia la marca de la acción si la inclinación vuelve cerca de cero
-                movementDone = false;
+                Debug.Log("INPUT MANAGER: Angulo maximo alcanzado");
             }
 
-            // Ejecuta la acción cuando el dispositivo vuelva a la posición inicial después de la inclinación
-            if (movementDone && Mathf.Abs(variationX) < minAngleOffset)
+
+            if (movementDone && currentInclination <= minAngleOffset)
             {
-                // Ejecuta tu acción aquí
+                movementDone = false;
+                Debug.Log("INPUT MANAGER: Vuelta a la posicion inicial");
                 DoSomething();
-                movementDone = false;
             }
 
-            //Debug.Log($"Orientatcion actual: {NetworkManager.Instance.getDeviceOrientation()}");
         }
     }
 
-    void DoSomething()
+    private float CalculateInclination()
     {
-        // Coloca aquí la lógica de la acción que deseas ejecutar
-        Debug.Log("¡Acción ejecutada!");
+        Vector3 acceleration = accel;
+        // Z - AXIS
+        float inclinationRadians = Mathf.Atan2(acceleration.z, Mathf.Sqrt(acceleration.x * acceleration.x + acceleration.y * acceleration.y));
+        // X - AXIS
+        //float inclinationRadians = Mathf.Atan2(acceleration.x, Mathf.Sqrt(acceleration.z * acceleration.z + acceleration.y * acceleration.y)) 
+        return Mathf.Abs(inclinationRadians * Mathf.Rad2Deg);
+    }
+
+    public void SetAccelVector(Vector3 orientation)
+    {
+        accel = orientation;
+    }
+
+    private void DoSomething()
+    {
+        // golpear
+        if (GameManager.Instance.ballCreated)
+        {
+            Debug.Log("Pelota/bomba golpeada");
+            GameManager.Instance.ballHit = true;
+        }
     }
 }
 

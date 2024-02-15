@@ -68,6 +68,7 @@ public class NetworkManager : MonoBehaviour
     private static void ReceiveMesageFromDevice(ushort fromClientId, Message message)
     {
         orientation = message.GetVector3();
+        InputManager.Instance.SetAccelVector(orientation);
     }
 
     public Vector3 getDeviceOrientation()
