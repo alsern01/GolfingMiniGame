@@ -9,6 +9,8 @@ public class InputManager : MonoBehaviour
     public float angleToReach = 60f;
     public float minAngleOffset = 10f; // Ajusta según sea necesario
     private bool movementDone = false;
+    public MenuPausa menuPausa;
+
 
     private Vector3 accel = Vector3.zero;
 
@@ -21,8 +23,14 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(menuPausa != null && menuPausa.enPausa)
+        {
+            return;
+        }
+
         if (GameManager.Instance.clientConnected)
         {  // Solo detecta el Input cuando haya un cliente conectado
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 // golpear
