@@ -10,7 +10,6 @@ public class InputManager : MonoBehaviour
 
     private float angleToReach = 30f;
     private bool movementDone = false;
-    public MenuPausa menuPausa;
 
 
     private Vector3 accel = Vector3.zero;
@@ -45,15 +44,11 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if(menuPausa != null && menuPausa.enPausa)
-        {
-            return;
-        }
 
         if (GameManager.Instance.clientConnected)
         {  // Solo detecta el Input cuando haya un cliente conectado
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa)
             {
                 // golpear
                 if (GameManager.Instance.ballCreated)

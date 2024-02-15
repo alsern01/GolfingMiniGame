@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public bool ballCreated { get; set; }
     public bool ballHit { get; set; }
 
+    public bool enPausa = false;
+
     private int _score;
     [SerializeField] private TextMeshProUGUI _scoreText;
 
@@ -24,7 +26,7 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
             //Convertirlo a false
-            clientConnected = false;
+            clientConnected = true;
             DontDestroyOnLoad(_instance);
         }
         else
