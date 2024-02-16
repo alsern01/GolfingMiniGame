@@ -12,17 +12,15 @@ public class MenuPausa : MonoBehaviour
         GameManager.Instance.enPausa = true;
         cuadroPausa.SetActive(true);
         Time.timeScale = 0;
+
     }
 
     public void ContinuarBoton()
     {
-        GameManager.Instance.enPausa = true;
+        GameManager.Instance.enPausa = false;
         cuadroPausa.SetActive(false);
         Time.timeScale = 1;
-    }
-    public void OpcionesBoton()
-    {
-        SceneManager.LoadScene("OptionsScene");
+
     }
 
     public void Salir()

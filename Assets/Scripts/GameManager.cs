@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public bool ballHit { get; set; }
 
     public bool enPausa = false;
+    public int numBalls = 0;
+    public int maxBalls = 10;
 
     private int _score;
     [SerializeField] private TextMeshProUGUI _scoreText;

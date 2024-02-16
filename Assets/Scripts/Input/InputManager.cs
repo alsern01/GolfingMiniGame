@@ -48,13 +48,14 @@ public class InputManager : MonoBehaviour
         if (GameManager.Instance.clientConnected)
         {  // Solo detecta el Input cuando haya un cliente conectado
 
-            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa)
+            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBalls < GameManager.Instance.maxBalls)
             {
                 // golpear
                 if (GameManager.Instance.ballCreated)
                 {
                     Debug.Log("Pelota/bomba golpeada");
                     GameManager.Instance.ballHit = true;
+                    GameManager.Instance.numBalls++;
                 }
             }
 

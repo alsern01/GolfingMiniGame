@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class ControllerOptions : MonoBehaviour
 {
-
+    public GameObject pantallaOpciones;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +15,5 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void EscenaJuego(){
-        SceneManager.LoadScene("GameScene");
-    }
-
-    public void OptionsBoton(){
-        //SceneManager.LoadScene("OptionsScene");
     }
 }
