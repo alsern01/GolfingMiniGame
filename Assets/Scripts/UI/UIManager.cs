@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private Slider movementSlider;
     [SerializeField] private GameObject connectionPanel;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     private static UIManager instance;
     public static UIManager Instance
@@ -54,5 +55,10 @@ public class UIManager : MonoBehaviour
         {
             movementSlider.fillRect.GetComponent<Image>().color = Color.blue;
         }
+    }
+
+    public void UpdateScore()
+    {
+        scoreText.SetText($"Score: {GameManager.Instance.GetScore()}");
     }
 }

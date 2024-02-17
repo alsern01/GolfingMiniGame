@@ -6,20 +6,18 @@ public class BallBombSpawner : MonoBehaviour
 {
     public GameObject ball, bomb;
     public MenuPausa menuP;
-    
-    [SerializeField] public Score score;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        //GenerateObject();
     }
 
     // Update is called once per frame
     void Update()
     {
         //En caso de que esté en pause no puedas interactuar
-        if (menuP.enPausa == true)
+        if (menuP.enPausa)
         {
             return;
         }
@@ -40,13 +38,11 @@ public class BallBombSpawner : MonoBehaviour
         {
             // Spawnea pelota
             Instantiate(ball, this.transform.position, Quaternion.identity);
-            score.SumarPuntos(20);
         }
         else
         {
             // Spawnea bomba
             GameObject instance = Instantiate(bomb, this.transform.position, Quaternion.identity);
-            score.RestarPuntos(10);
         }
     }
 
