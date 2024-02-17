@@ -9,6 +9,10 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private Slider movementSlider;
     [SerializeField] private GameObject connectionPanel;
+    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private TextMeshProUGUI ipText;
+    [SerializeField] private PreparationCountdownTimer timer;
+
 
     private static UIManager instance;
     public static UIManager Instance
@@ -33,13 +37,11 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
+
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.clientConnected)
-            connectionPanel.SetActive(false);
-        else
-            connectionPanel.SetActive(true);
+
     }
 
     public void UpdateSlider(float value)
@@ -54,5 +56,37 @@ public class UIManager : MonoBehaviour
         {
             movementSlider.fillRect.GetComponent<Image>().color = Color.blue;
         }
+    }
+
+    public void SetIPText()
+    {
+        ipText.SetText($"{ipText.text} {NetworkManager.Instance.ipAddress}");
+    }
+
+
+    public void StartCountdown()
+    {
+        infoText.gameObject.SetActive(false);
+        ipText.gameObject.SetActive(false);
+
+        timer.Init();
+        timer.gameObject.SetActive(true);
+    }
+
+    public void StopCountdown()
+    {
+        infoText.gameObject.SetActive(true);
+        ipText.gameObject.SetActive(true);
+
+        timer.gameObject.SetActive(false);
+    }
+    public void EnableConnectionPanel()
+    {
+        connectionPanel.SetActive(true);
+    }
+
+    public void DisableConnectionPanel()
+    {
+        connectionPanel.SetActive(false);
     }
 }

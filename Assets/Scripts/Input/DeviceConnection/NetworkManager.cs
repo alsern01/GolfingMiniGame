@@ -2,6 +2,8 @@ using Riptide;
 using Riptide.Utils;
 using UnityEngine;
 using System.Net;
+using Riptide.Transports;
+using System;
 
 public enum MessageID
 {
@@ -50,8 +52,12 @@ public class NetworkManager : MonoBehaviour
         RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 
         Server = new Server();
+        Server.ClientConnected += OnClientConnected;
+        Server.ClientDisconnected += OnClientDisconnected;
+
         Server.Start(port, maxClientCount);
 
+        UIManager.Instance.SetIPText();
     }
 
     private void FixedUpdate()
@@ -91,5 +97,20 @@ public class NetworkManager : MonoBehaviour
         }
 
         return ipAddress;
+    }
+
+    private void OnClientConnected(object sender, EventArgs e)
+    {
+        Debug.Log("Client connected");
+        GameManager.Instance.ClientConnected();
+        UIManager.Instance.StartCountdown();
+    }
+
+    private void OnClientDisconnected(object sender, EventArgs e)
+    {
+        Debug.Log("Client disconnected");
+        UIManager.Instance.EnableConnectionPanel();
+        UIManager.Instance.StopCountdown();
+        GameManager.Instance.StopGame();
     }
 }

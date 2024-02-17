@@ -45,7 +45,7 @@ public class InputManager : MonoBehaviour
     void Update()
     {
 
-        if (GameManager.Instance.clientConnected)
+        if (GameManager.Instance.playing)
         {  // Solo detecta el Input cuando haya un cliente conectado
 
             if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBalls < GameManager.Instance.maxBalls)

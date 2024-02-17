@@ -9,8 +9,6 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get { return _instance; } }
 
-    public bool ballCreated { get; set; }
-    public bool ballHit { get; set; }
 
     public bool enPausa = false;
     public int numBalls = 0;
@@ -19,7 +17,12 @@ public class GameManager : MonoBehaviour
     private int _score;
     [SerializeField] private TextMeshProUGUI _scoreText;
 
+    public bool ballCreated { get; set; }
+    public bool ballHit { get; set; }
     public bool clientConnected { get; private set; }
+    public bool playing { get; private set; }
+
+    [SerializeField] private GameObject preparationCountdownTimer;
 
 
     private void Awake()
@@ -28,7 +31,8 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
             //Convertirlo a false
-            clientConnected = true;
+            clientConnected = false;
+            playing = false;
             DontDestroyOnLoad(_instance);
         }
         else
@@ -40,10 +44,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (NetworkManager.Instance.Server.ClientCount >= 1)
-        {
-            clientConnected = true;
-        }
+
     }
 
     public void AddPoints(int numPoints)
@@ -56,4 +57,21 @@ public class GameManager : MonoBehaviour
     {
         return _score;
     }
+
+    public void ClientConnected()
+    {
+        clientConnected = true;
+    }
+
+    public void StartGame()
+    {
+        playing = true;
+    }
+
+    public void StopGame()
+    {
+        clientConnected = false;
+        playing = false;
+    }
+
 }
