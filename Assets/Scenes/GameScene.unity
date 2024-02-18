@@ -513,6 +513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minAngleOffset: 5
+  player: {fileID: 231714312}
 --- !u!1 &184398638
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +570,7 @@ GameObject:
   - component: {fileID: 231714310}
   - component: {fileID: 231714309}
   - component: {fileID: 231714311}
+  - component: {fileID: 231714312}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -664,6 +666,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &231714312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231714308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0c90706bf7adc045af3a02a0d179adf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 231714311}
 --- !u!1 &269818692
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,10 +790,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ece081084f1a142beeefc3c4239669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enPausa: 0
   numBalls: 0
   maxBalls: 10
   _scoreText: {fileID: 1325707457}
+  enPausa: 0
   preparationCountdownTimer: {fileID: 1449875039}
 --- !u!4 &354487211
 Transform:

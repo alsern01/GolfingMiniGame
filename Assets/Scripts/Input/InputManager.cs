@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
     public float minAngleOffset;
 
     private float angleToReach = 30f;
-    private bool movementDone = false;
+    public bool movementDone { private set; get; }
 
 
     private Vector3 accel = Vector3.zero;
@@ -32,6 +32,8 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private Player player;
+
     private void Awake()
     {
         instance = this;
@@ -39,24 +41,25 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-
+        movementDone = false;
     }
 
     void Update()
     {
 
-        if (GameManager.Instance.playing)
+        if (GameManager.Instance.playing && !GameManager.Instance.playerAnim)
         {  // Solo detecta el Input cuando haya un cliente conectado
 
             if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBalls < GameManager.Instance.maxBalls)
             {
-                // golpear
-                if (GameManager.Instance.ballCreated)
-                {
-                    Debug.Log("Pelota/bomba golpeada");
-                    GameManager.Instance.ballHit = true;
-                    GameManager.Instance.numBalls++;
-                }
+                //// golpear
+                //if (GameManager.Instance.ballCreated)
+                //{
+                //    Debug.Log("Pelota/bomba golpeada");
+                //    GameManager.Instance.ballHit = true;
+                //    GameManager.Instance.numBalls++;
+                //}
+                PlayerMovement();
             }
 
 
@@ -76,7 +79,7 @@ public class InputManager : MonoBehaviour
             {
                 movementDone = false;
                 Debug.Log("INPUT MANAGER: Vuelta a la posicion inicial");
-                DoSomething();
+                PlayerMovement();
             }
 
         }
@@ -97,14 +100,10 @@ public class InputManager : MonoBehaviour
         accel = orientation;
     }
 
-    private void DoSomething()
+    private void PlayerMovement()
     {
-        // golpear
-        if (GameManager.Instance.ballCreated)
-        {
-            Debug.Log("Pelota/bomba golpeada");
-            GameManager.Instance.ballHit = true;
-        }
+        GameManager.Instance.playerAnim = true;
+        player.PerformMovement();
     }
 }
 

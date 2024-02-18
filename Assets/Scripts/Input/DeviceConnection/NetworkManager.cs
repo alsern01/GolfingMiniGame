@@ -102,7 +102,7 @@ public class NetworkManager : MonoBehaviour
     private void OnClientConnected(object sender, EventArgs e)
     {
         Debug.Log("Client connected");
-        GameManager.Instance.ClientConnected();
+        GameManager.Instance.clientConnected = true;
         UIManager.Instance.StartCountdown();
     }
 

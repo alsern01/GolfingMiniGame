@@ -23,12 +23,12 @@ public class PreparationCountdownTimer : MonoBehaviour
         }
         else
         {
-            Invoke("DisableObject", 1.0f);
+            Invoke("OnCountdownEnded", 1.0f);
         }
 
     }
 
-    private void DisableObject()
+    private void OnCountdownEnded()
     {
         GameManager.Instance.StartGame();
         UIManager.Instance.DisableConnectionPanel();

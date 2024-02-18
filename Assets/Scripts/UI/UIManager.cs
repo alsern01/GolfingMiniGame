@@ -50,11 +50,11 @@ public class UIManager : MonoBehaviour
 
         if (value >= 1f)
         {
-            movementSlider.fillRect.GetComponent<Image>().color = Color.green;
+            movementSlider.fillRect.GetComponent<Image>().color = Color.blue;
         }
         else
         {
-            movementSlider.fillRect.GetComponent<Image>().color = Color.blue;
+            movementSlider.fillRect.GetComponent<Image>().color = Color.red;
         }
     }
 
