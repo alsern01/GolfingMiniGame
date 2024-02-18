@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-    public float minAngleOffset;
-
+    private float initialAngle = float.NegativeInfinity;
     private float angleToReach = 30f;
+
+    public float minAngleOffset = 5.0f;
+
     public bool movementDone { private set; get; }
 
 
@@ -49,6 +51,10 @@ public class InputManager : MonoBehaviour
 
         if (GameManager.Instance.playing && !GameManager.Instance.playerAnim)
         {  // Solo detecta el Input cuando haya un cliente conectado
+            if (initialAngle < 0)
+            {
+                SetInitialInclination();
+            }
 
             if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBalls < GameManager.Instance.maxBalls)
             {
@@ -64,10 +70,10 @@ public class InputManager : MonoBehaviour
 
 
             float currentInclination = CalculateInclination();
-            float movementPercent = Mathf.Clamp01(currentInclination / angleToReach);
+            float movementPercent = Mathf.Clamp01((currentInclination - initialAngle) / (angleToReach + initialAngle));
             UIManager.Instance.UpdateSlider(movementPercent);
 
-            if (currentInclination >= angleToReach && !movementDone)
+            if (currentInclination >= angleToReach + initialAngle && !movementDone)
             {
                 Debug.Log($"INPUT MANAGER: Inclination angle -> {currentInclination}");
                 movementDone = true;
@@ -75,7 +81,7 @@ public class InputManager : MonoBehaviour
             }
 
 
-            if (movementDone && currentInclination <= minAngleOffset)
+            if (movementDone && currentInclination <= initialAngle + minAngleOffset)
             {
                 movementDone = false;
                 Debug.Log("INPUT MANAGER: Vuelta a la posicion inicial");
@@ -104,6 +110,12 @@ public class InputManager : MonoBehaviour
     {
         GameManager.Instance.playerAnim = true;
         player.PerformMovement();
+    }
+
+    private void SetInitialInclination()
+    {
+        initialAngle = CalculateInclination();
+        Debug.Log("INITIAL: " + initialAngle);
     }
 }
 
