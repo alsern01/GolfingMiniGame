@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region GAME CONFIG VALUES
-    public int numBalls = 0;
+    public int numBallHit = 0;
     public int maxBalls = 10;
     #endregion
 

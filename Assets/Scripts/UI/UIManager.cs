@@ -12,7 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private TextMeshProUGUI ipText;
     [SerializeField] private PreparationCountdownTimer timer;
-
+    [SerializeField] private RectTransform uiBallBarTransform;
+    [SerializeField] private Image uiBallPrefab;
 
     private static UIManager instance;
     public static UIManager Instance
@@ -37,8 +38,11 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        //ShowBallHitFeedback();
+    }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -88,5 +92,21 @@ public class UIManager : MonoBehaviour
     public void DisableConnectionPanel()
     {
         connectionPanel.SetActive(false);
+    }
+
+    public void ShowBallHitFeedback()
+    {
+        // Calcular la distancia entre las bolas
+        float distanceBetweenBall = uiBallBarTransform.sizeDelta.x / (GameManager.Instance.maxBalls - 1);
+
+        float x = uiBallBarTransform.anchoredPosition.x - uiBallBarTransform.sizeDelta.x / 2 + (GameManager.Instance.numBallHit - 1) * distanceBetweenBall;
+        float y = uiBallBarTransform.anchoredPosition.y + uiBallBarTransform.sizeDelta.y / 2;
+
+        // Clamp the x position to ensure it stays within the bounds of the parent
+        x = Mathf.Clamp(x, uiBallBarTransform.anchoredPosition.x - uiBallBarTransform.sizeDelta.x / 2, uiBallBarTransform.anchoredPosition.x + uiBallBarTransform.sizeDelta.x / 2);
+
+        // instancia imagen y cambia el transform a la posición calculada
+        Image spawnedUiBall = Instantiate(uiBallPrefab, uiBallBarTransform);
+        spawnedUiBall.rectTransform.anchoredPosition = new Vector2(x, y);
     }
 }
