@@ -52,8 +52,16 @@ public class NetworkManager : MonoBehaviour
         RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 
         Server = new Server();
+
+
+#if !UNITY_EDITOR
         Server.ClientConnected += OnClientConnected;
         Server.ClientDisconnected += OnClientDisconnected;
+#elif UNITY_EDITOR
+        Debug.Log("Client connected");
+        GameManager.Instance.clientConnected = true;
+        UIManager.Instance.StartCountdown();
+#endif
 
         Server.Start(port, maxClientCount);
 

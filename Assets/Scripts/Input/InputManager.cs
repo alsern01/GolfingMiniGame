@@ -58,13 +58,13 @@ public class InputManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBalls < GameManager.Instance.maxBalls)
             {
-                //// golpear
-                //if (GameManager.Instance.ballCreated)
-                //{
-                //    Debug.Log("Pelota/bomba golpeada");
-                //    GameManager.Instance.ballHit = true;
-                //    GameManager.Instance.numBalls++;
-                //}
+                // golpear
+                if (GameManager.Instance.ballCreated)
+                {
+                    Debug.Log("Pelota/bomba golpeada");
+                    GameManager.Instance.ballHit = true;
+                    GameManager.Instance.numBalls++;
+                }
                 PlayerMovement();
             }
 
