@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class LogicaBrillo : MonoBehaviour
 {
-
     public Slider slider;
     public float sliderValue;
     public Image panelBrillo;
