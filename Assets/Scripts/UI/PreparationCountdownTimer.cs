@@ -37,6 +37,6 @@ public class PreparationCountdownTimer : MonoBehaviour
 
     public void Init()
     {
-        timeLeft = 10;
+        timeLeft = 5;
     }
 }
