@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
 
             playing = false;
             playerAnim = false;
-            DontDestroyOnLoad(_instance);
         }
         else
         {
