@@ -78,4 +78,13 @@ public class GameManager : MonoBehaviour
         playing = false;
     }
 
+    private void HitAnimation()
+    {
+        ballHit = true;
+    }
+
+    public bool RoundFinished()
+    {
+        return numBallHit >= maxBalls;
+    }
 }

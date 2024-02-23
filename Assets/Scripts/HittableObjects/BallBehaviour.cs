@@ -6,10 +6,16 @@ public class BallBehaviour : MonoBehaviour
 {
     public int pointsGiven = 50;
 
-    // Start is called before the first frame update
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
+    }
+
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -17,7 +23,8 @@ public class BallBehaviour : MonoBehaviour
     {
         if (GameManager.Instance.ballHit)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            animator.enabled = true;
             GameManager.Instance.AddPoints(pointsGiven);
             GameManager.Instance.ballHit = false;
         }
@@ -25,6 +32,7 @@ public class BallBehaviour : MonoBehaviour
 
     private void OnDestroy()
     {
+        GameManager.Instance.playerAnim = false;
         GameManager.Instance.ballCreated = false;
     }
 }

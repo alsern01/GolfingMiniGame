@@ -61,8 +61,6 @@ public class InputManager : MonoBehaviour
                 // golpear
                 if (GameManager.Instance.ballCreated)
                 {
-                    Debug.Log("Pelota/bomba golpeada");
-                    GameManager.Instance.ballHit = true;
                     GameManager.Instance.numBallHit++;
                     UIManager.Instance.ShowBallHitFeedback();
                 }

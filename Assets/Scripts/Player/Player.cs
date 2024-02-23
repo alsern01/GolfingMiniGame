@@ -17,7 +17,8 @@ public class Player : MonoBehaviour
 
     public void PerformMovement()
     {
-        if (GameManager.Instance.playerAnim) animator.SetBool("AnimationTrigger", true);
+        if (GameManager.Instance.playerAnim) 
+            animator.SetBool("AnimationTrigger", true);
         else animator.SetBool("AnimationTrigger", false);
     }
 }

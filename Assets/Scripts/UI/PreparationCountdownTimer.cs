@@ -23,6 +23,7 @@ public class PreparationCountdownTimer : MonoBehaviour
         }
         else
         {
+            timerText.SetText("YA!!");
             Invoke("OnCountdownEnded", 1.0f);
         }
 
@@ -37,6 +38,6 @@ public class PreparationCountdownTimer : MonoBehaviour
 
     public void Init()
     {
-        timeLeft = 5;
+        timeLeft = 2;
     }
 }

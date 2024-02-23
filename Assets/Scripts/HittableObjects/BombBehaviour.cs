@@ -7,11 +7,11 @@ public class BombBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HideBomb();
+        Invoke("HideBomb", 2.0f);
     }
 
     private void HideBomb()
     {
-        Destroy(this.gameObject, 3);
+        GetComponent<Animator>().enabled = true;
     }
 }

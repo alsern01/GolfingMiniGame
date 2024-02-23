@@ -6,8 +6,6 @@ public class BallBombSpawner : MonoBehaviour
 {
     public GameObject ball, bomb;
     public MenuPausa menuP;
-    
-    [SerializeField] public Score score;
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +18,9 @@ public class BallBombSpawner : MonoBehaviour
     {
         if (GameManager.Instance.clientConnected) // Solo empieza a generar objetos cuando haya un cliente conectado
         {
-            if (!GameManager.Instance.ballCreated)
+            if (!GameManager.Instance.ballCreated && !GameManager.Instance.RoundFinished())
             {
-                Invoke("GenerateObject", 1.0f);
+                Invoke("GenerateObject", 0.5f);
                 GameManager.Instance.ballCreated = true;
             }
         }
@@ -34,13 +32,11 @@ public class BallBombSpawner : MonoBehaviour
         {
             // Spawnea pelota
             Instantiate(ball, this.transform.position, Quaternion.identity);
-            score.SumarPuntos(20);
         }
         else
         {
             // Spawnea bomba
             GameObject instance = Instantiate(bomb, this.transform.position, Quaternion.identity);
-            score.RestarPuntos(10);
         }
     }
 
