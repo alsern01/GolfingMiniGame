@@ -7,7 +7,6 @@ public class BallBombSpawner : MonoBehaviour
     public GameObject ball, bomb;
     public MenuPausa menuP;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,17 +15,11 @@ public class BallBombSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //En caso de que esté en pause no puedas interactuar
-        if (menuP.enPausa)
-        {
-            return;
-        }
-
         if (GameManager.Instance.clientConnected) // Solo empieza a generar objetos cuando haya un cliente conectado
         {
-            if (!GameManager.Instance.ballCreated)
+            if (!GameManager.Instance.ballCreated && !GameManager.Instance.RoundFinished())
             {
-                Invoke("GenerateObject", 1.0f);
+                Invoke("GenerateObject", 0.5f);
                 GameManager.Instance.ballCreated = true;
             }
         }

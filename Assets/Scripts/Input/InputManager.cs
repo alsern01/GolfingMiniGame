@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-    public float minAngleOffset;
-
+    private float initialAngle = float.NegativeInfinity;
     private float angleToReach = 30f;
-    private bool movementDone = false;
-    public MenuPausa menuPausa;
+
+    public float minAngleOffset = 5.0f;
+
+    public bool movementDone { private set; get; }
 
 
     private Vector3 accel = Vector3.zero;
@@ -33,6 +34,8 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private Player player;
+
     private void Awake()
     {
         instance = this;
@@ -40,35 +43,36 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-
+        movementDone = false;
     }
 
     void Update()
     {
-        if(menuPausa != null && menuPausa.enPausa)
-        {
-            return;
-        }
 
-        if (GameManager.Instance.clientConnected)
+        if (GameManager.Instance.playing && !GameManager.Instance.playerAnim)
         {  // Solo detecta el Input cuando haya un cliente conectado
+            if (initialAngle < 0)
+            {
+                SetInitialInclination();
+            }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBallHit < GameManager.Instance.maxBalls)
             {
                 // golpear
                 if (GameManager.Instance.ballCreated)
                 {
-                    Debug.Log("Pelota/bomba golpeada");
-                    GameManager.Instance.ballHit = true;
+                    GameManager.Instance.numBallHit++;
+                    UIManager.Instance.ShowBallHitFeedback();
                 }
+                PlayerMovement();
             }
 
 
             float currentInclination = CalculateInclination();
-            float movementPercent = Mathf.Clamp01(currentInclination / angleToReach);
+            float movementPercent = Mathf.Clamp01((currentInclination - initialAngle) / (angleToReach + initialAngle));
             UIManager.Instance.UpdateSlider(movementPercent);
 
-            if (currentInclination >= angleToReach && !movementDone)
+            if (currentInclination >= angleToReach + initialAngle && !movementDone)
             {
                 Debug.Log($"INPUT MANAGER: Inclination angle -> {currentInclination}");
                 movementDone = true;
@@ -76,11 +80,11 @@ public class InputManager : MonoBehaviour
             }
 
 
-            if (movementDone && currentInclination <= minAngleOffset)
+            if (movementDone && currentInclination <= initialAngle + minAngleOffset)
             {
                 movementDone = false;
                 Debug.Log("INPUT MANAGER: Vuelta a la posicion inicial");
-                DoSomething();
+                PlayerMovement();
             }
 
         }
@@ -101,14 +105,16 @@ public class InputManager : MonoBehaviour
         accel = orientation;
     }
 
-    private void DoSomething()
+    private void PlayerMovement()
     {
-        // golpear
-        if (GameManager.Instance.ballCreated)
-        {
-            Debug.Log("Pelota/bomba golpeada");
-            GameManager.Instance.ballHit = true;
-        }
+        GameManager.Instance.playerAnim = true;
+        player.PerformMovement();
+    }
+
+    private void SetInitialInclination()
+    {
+        initialAngle = CalculateInclination();
+        Debug.Log("INITIAL: " + initialAngle);
     }
 }
 
