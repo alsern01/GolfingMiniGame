@@ -10,7 +10,7 @@ public class LogicaOpciones : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        panelOptions = GameObject.FindGameObjectWithTag("Opciones").GetComponent<ControllerOptions>();
+        //panelOptions = GameObject.FindGameObjectWithTag("Opciones").GetComponent<ControllerOptions>();
         
     }
 
