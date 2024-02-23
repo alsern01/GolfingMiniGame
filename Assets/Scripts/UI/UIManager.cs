@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private PreparationCountdownTimer timer;
     [SerializeField] private RectTransform uiBallBarTransform;
     [SerializeField] private Image uiBallPrefab;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     private static UIManager instance;
     public static UIManager Instance
@@ -92,6 +93,11 @@ public class UIManager : MonoBehaviour
     public void DisableConnectionPanel()
     {
         connectionPanel.SetActive(false);
+    }
+
+    public void UpdateScore()
+    {
+        scoreText.SetText($"Score: {GameManager.Instance.GetScore()}");
     }
 
     public void ShowBallHitFeedback()
