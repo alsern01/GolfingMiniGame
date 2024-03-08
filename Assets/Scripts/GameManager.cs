@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
     public void AddPoints(int numPoints)
     {
         _score += numPoints;
+        if (_score < 0)
+        {
+            _score = 0;
+        }
+
         UIManager.Instance.UpdateScore();
     }
 
@@ -80,6 +85,7 @@ public class GameManager : MonoBehaviour
     private void HitAnimation()
     {
         ballHit = true;
+        numBallHit++;
     }
 
     public bool RoundFinished()

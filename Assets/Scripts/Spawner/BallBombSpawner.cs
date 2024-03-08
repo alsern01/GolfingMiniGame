@@ -27,7 +27,7 @@ public class BallBombSpawner : MonoBehaviour
 
     private void GenerateObject()
     {
-        if (Random.Range(0.0f, 1.0f) > 0.2f)
+        if (Random.Range(0, 10) > 3f)
         {
             // Spawnea pelota
             Instantiate(ball, this.transform.position, Quaternion.identity);

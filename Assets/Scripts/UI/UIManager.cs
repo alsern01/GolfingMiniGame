@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,9 +10,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private TextMeshProUGUI ipText;
     [SerializeField] private PreparationCountdownTimer timer;
+    [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private RectTransform uiBallBarTransform;
     [SerializeField] private Image uiBallPrefab;
-    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private Sprite uiHittedBall;
+    [SerializeField] private Sprite uiHittedBomb;
+
+    private List<Image> uiBallImages = new List<Image>();
 
     private static UIManager instance;
     public static UIManager Instance
@@ -38,7 +43,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        //ShowBallHitFeedback();
+        ShowBallsToHit();
     }
 
     void Update()
@@ -94,22 +99,36 @@ public class UIManager : MonoBehaviour
 
     public void UpdateScore()
     {
-        scoreText.SetText($"Score: {GameManager.Instance.GetScore()}");
+        scoreText.SetText($"{GameManager.Instance.GetScore()}");
     }
 
-    public void ShowBallHitFeedback()
+    public void ShowBallsToHit()
     {
-        // Calcular la distancia entre las bolas
-        float distanceBetweenBall = uiBallBarTransform.sizeDelta.x / (GameManager.Instance.maxBalls - 1);
+        int totalBalls = GameManager.Instance.maxBalls; // Número total de imágenes a mostrar
+        float distanceBetweenBall = uiBallBarTransform.sizeDelta.x / (totalBalls - 1);
 
-        float x = uiBallBarTransform.anchoredPosition.x - uiBallBarTransform.sizeDelta.x / 2 + (GameManager.Instance.numBallHit - 1) * distanceBetweenBall;
-        float y = uiBallBarTransform.anchoredPosition.y + uiBallBarTransform.sizeDelta.y / 2;
+        float startX = uiBallBarTransform.anchoredPosition.x - uiBallBarTransform.sizeDelta.x / 2;
+        float y = 0 - uiBallPrefab.preferredHeight / 2;
 
-        // Clamp the x position to ensure it stays within the bounds of the parent
-        x = Mathf.Clamp(x, uiBallBarTransform.anchoredPosition.x - uiBallBarTransform.sizeDelta.x / 2, uiBallBarTransform.anchoredPosition.x + uiBallBarTransform.sizeDelta.x / 2);
+        for (int i = 0; i < totalBalls; i++)
+        {
+            float x = startX + i * distanceBetweenBall;
+            // Instancia la imagen y cambia el transform a la posición calculada
+            Image spawnedUiBall = Instantiate(uiBallPrefab, uiBallBarTransform);
+            spawnedUiBall.rectTransform.anchoredPosition = new Vector2(x, y);
+            uiBallImages.Add(spawnedUiBall);
+        }
+    }
 
-        // instancia imagen y cambia el transform a la posici�n calculada
-        Image spawnedUiBall = Instantiate(uiBallPrefab, uiBallBarTransform);
-        spawnedUiBall.rectTransform.anchoredPosition = new Vector2(x, y);
+    public void ChangeHitImageSprite(int index, bool bomb)
+    {
+        if (index < GameManager.Instance.maxBalls)
+        {
+            if (bomb)
+                uiBallImages[index].sprite = uiHittedBomb;
+            else
+                uiBallImages[index].sprite = uiHittedBall;
+
+        }
     }
 }

@@ -61,8 +61,7 @@ public class InputManager : MonoBehaviour
                 // golpear
                 if (GameManager.Instance.ballCreated)
                 {
-                    GameManager.Instance.numBallHit++;
-                    UIManager.Instance.ShowBallHitFeedback();
+                    //GameManager.Instance.numBallHit++;
                 }
                 PlayerMovement();
             }
@@ -103,6 +102,11 @@ public class InputManager : MonoBehaviour
     public void SetAccelVector(Vector3 orientation)
     {
         accel = orientation;
+    }
+
+    public void ResetMovement()
+    {
+        movementDone = false;
     }
 
     private void PlayerMovement()

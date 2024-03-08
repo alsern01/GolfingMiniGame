@@ -44,7 +44,6 @@ public class NetworkManager : MonoBehaviour
         Instance = this;
 
         ipAddress = GetLocalIPAddress();
-        Debug.Log("Device local IP address is: " + ipAddress);
     }
 
     private void Start()
@@ -55,17 +54,16 @@ public class NetworkManager : MonoBehaviour
 
 
 
-        //#if UNITY_EDITOR
-        //        Debug.Log("Client connected");
-        //        GameManager.Instance.clientConnected = true;
-        //        UIManager.Instance.StartCountdown();
-        //#elif UNITY_STANDALONE
-        //        Server.ClientConnected += OnClientConnected;
-        //        Server.ClientDisconnected += OnClientDisconnected;
-        //#endif
+#if UNITY_EDITOR
+        GameManager.Instance.clientConnected = true;
+        UIManager.Instance.StartCountdown();
+#elif UNITY_STANDALONE
+                Server.ClientConnected += OnClientConnected;
+                Server.ClientDisconnected += OnClientDisconnected;
+#endif
 
-        Server.ClientConnected += OnClientConnected;
-        Server.ClientDisconnected += OnClientDisconnected;
+        //Server.ClientConnected += OnClientConnected;
+        //Server.ClientDisconnected += OnClientDisconnected;
 
         Server.Start(port, maxClientCount);
 
@@ -113,14 +111,12 @@ public class NetworkManager : MonoBehaviour
 
     private void OnClientConnected(object sender, EventArgs e)
     {
-        Debug.Log("Client connected");
         GameManager.Instance.clientConnected = true;
         UIManager.Instance.StartCountdown();
     }
 
     private void OnClientDisconnected(object sender, EventArgs e)
     {
-        Debug.Log("Client disconnected");
         UIManager.Instance.EnableConnectionPanel();
         UIManager.Instance.StopCountdown();
         GameManager.Instance.StopGame();
