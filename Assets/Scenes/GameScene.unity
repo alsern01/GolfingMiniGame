@@ -3012,7 +3012,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numBallHit: 0
   maxBalls: 10
-  _scoreText: {fileID: 1325707457}
   enPausa: 0
   preparationCountdownTimer: {fileID: 0}
 --- !u!4 &354487211
@@ -9592,6 +9591,7 @@ MonoBehaviour:
   timer: {fileID: 639794172}
   uiBallBarTransform: {fileID: 2108196960}
   uiBallPrefab: {fileID: 6340344144308544492, guid: 097d233ae0910fa4b90ed86a4da29ecc, type: 3}
+  scoreText: {fileID: 1325707457}
 --- !u!224 &1350038931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15311,7 +15311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2046689569
 RectTransform:
   m_ObjectHideFlags: 0

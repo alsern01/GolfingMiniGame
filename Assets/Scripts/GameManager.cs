@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     #region GAME STATE VALUES
     private int _score;
-    [SerializeField] private TextMeshProUGUI _scoreText;
 
     public bool ballCreated { get; set; }
     public bool ballHit { get; set; }
@@ -59,7 +58,7 @@ public class GameManager : MonoBehaviour
     public void AddPoints(int numPoints)
     {
         _score += numPoints;
-        _scoreText.SetText($"Score: {_score}");
+        UIManager.Instance.UpdateScore();
     }
 
     public int GetScore()

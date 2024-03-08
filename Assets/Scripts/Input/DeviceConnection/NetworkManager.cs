@@ -54,14 +54,18 @@ public class NetworkManager : MonoBehaviour
         Server = new Server();
 
 
-#if !UNITY_EDITOR
+
+        //#if UNITY_EDITOR
+        //        Debug.Log("Client connected");
+        //        GameManager.Instance.clientConnected = true;
+        //        UIManager.Instance.StartCountdown();
+        //#elif UNITY_STANDALONE
+        //        Server.ClientConnected += OnClientConnected;
+        //        Server.ClientDisconnected += OnClientDisconnected;
+        //#endif
+
         Server.ClientConnected += OnClientConnected;
         Server.ClientDisconnected += OnClientDisconnected;
-#elif UNITY_EDITOR
-        Debug.Log("Client connected");
-        GameManager.Instance.clientConnected = true;
-        UIManager.Instance.StartCountdown();
-#endif
 
         Server.Start(port, maxClientCount);
 

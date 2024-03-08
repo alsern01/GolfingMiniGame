@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using TMPro.EditorUtilities;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private PreparationCountdownTimer timer;
     [SerializeField] private RectTransform uiBallBarTransform;
     [SerializeField] private Image uiBallPrefab;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     private static UIManager instance;
     public static UIManager Instance
@@ -94,6 +92,11 @@ public class UIManager : MonoBehaviour
         connectionPanel.SetActive(false);
     }
 
+    public void UpdateScore()
+    {
+        scoreText.SetText($"Score: {GameManager.Instance.GetScore()}");
+    }
+
     public void ShowBallHitFeedback()
     {
         // Calcular la distancia entre las bolas
@@ -105,7 +108,7 @@ public class UIManager : MonoBehaviour
         // Clamp the x position to ensure it stays within the bounds of the parent
         x = Mathf.Clamp(x, uiBallBarTransform.anchoredPosition.x - uiBallBarTransform.sizeDelta.x / 2, uiBallBarTransform.anchoredPosition.x + uiBallBarTransform.sizeDelta.x / 2);
 
-        // instancia imagen y cambia el transform a la posición calculada
+        // instancia imagen y cambia el transform a la posiciï¿½n calculada
         Image spawnedUiBall = Instantiate(uiBallPrefab, uiBallBarTransform);
         spawnedUiBall.rectTransform.anchoredPosition = new Vector2(x, y);
     }
