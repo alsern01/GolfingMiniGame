@@ -8,13 +8,13 @@ public class InputManager : MonoBehaviour
 {
     private float initialAngle = float.NegativeInfinity;
     private float angleToReach = 30f;
-
-    public float minAngleOffset = 5.0f;
+    private Vector3 accel = Vector3.zero;
+    [SerializeField] private float timeBetweenSaves = 1f;
+    [SerializeField] private float minAngleOffset = 1f;
 
     public bool movementDone { private set; get; }
 
 
-    private Vector3 accel = Vector3.zero;
 
     private static InputManager instance;
     public static InputManager Instance
@@ -68,6 +68,16 @@ public class InputManager : MonoBehaviour
 
 
             float currentInclination = CalculateInclination();
+
+            if (timeBetweenSaves > 0)
+                timeBetweenSaves -= Time.deltaTime;
+            else
+            {
+                Debug.Log($"Dato guardado: ({Time.time}, {currentInclination})");
+                PlayerData.Instance().rawInput.Add((Time.time, currentInclination));
+                timeBetweenSaves = 1f;
+            }
+
             float movementPercent = Mathf.Clamp01((currentInclination - initialAngle) / (angleToReach + initialAngle));
             UIManager.Instance.UpdateSlider(movementPercent);
 

@@ -1434,6 +1434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a4df49ebfc61664f9282630d14eeb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBetweenSaves: 5
   minAngleOffset: 5
   player: {fileID: 231714312}
 --- !u!1 &149742404
@@ -6224,7 +6225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Por favor con\xE9ctate a la IP: "
+  m_text: 'Por favor introduce la IP: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4c58e560d3124f9419b4516b7d9c5af4, type: 2}
   m_sharedMaterial: {fileID: 6533421549496890567, guid: 4c58e560d3124f9419b4516b7d9c5af4, type: 2}

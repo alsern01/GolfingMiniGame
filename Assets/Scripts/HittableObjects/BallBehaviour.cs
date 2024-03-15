@@ -27,7 +27,12 @@ public class BallBehaviour : MonoBehaviour
             animator.enabled = true;
             GameManager.Instance.AddPoints(pointsGiven);
             GameManager.Instance.ballHit = false;
-            UIManager.Instance.ChangeHitImageSprite(GameManager.Instance.numBallHit - 1, pointsGiven < 0 ? true : false); ;
+            UIManager.Instance.ChangeHitImageSprite(GameManager.Instance.numBallHit - 1, pointsGiven < 0 ? true : false);
+            
+            if (pointsGiven > 0)
+                PlayerData.Instance().totalBallHit++;
+            else
+                PlayerData.Instance().totalBombHit++;
         }
     }
 

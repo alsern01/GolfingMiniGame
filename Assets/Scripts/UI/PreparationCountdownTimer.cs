@@ -24,20 +24,20 @@ public class PreparationCountdownTimer : MonoBehaviour
         else
         {
             timerText.SetText("YA!!");
-            Invoke("OnCountdownEnded", 1.0f);
+            Invoke("OnCountdownEnd", 1.0f);
         }
 
     }
 
-    private void OnCountdownEnded()
+    private void OnCountdownEnd()
     {
         GameManager.Instance.StartGame();
         UIManager.Instance.DisableConnectionPanel();
         this.gameObject.SetActive(false);
     }
 
-    public void Init()
+    public void Init(float prepTime)
     {
-        timeLeft = 2;
+        timeLeft = prepTime;
     }
 }

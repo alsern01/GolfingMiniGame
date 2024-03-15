@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
         infoText.gameObject.SetActive(false);
         ipText.gameObject.SetActive(false);
 
-        timer.Init();
+        timer.Init(5.0f);
         timer.gameObject.SetActive(true);
     }
 
