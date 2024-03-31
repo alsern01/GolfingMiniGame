@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,10 +8,10 @@ using UnityEngine.UI;
 public class InputManager : MonoBehaviour
 {
     private float initialAngle = float.NegativeInfinity;
-    private float angleToReach = 30f;
+    private float angleToReach = 0f;
     private Vector3 accel = Vector3.zero;
     [SerializeField] private float timeBetweenSaves = 1f;
-    [SerializeField] private float minAngleOffset = 1f;
+    [SerializeField] private float minAngleOffset = 0.5f;
 
     public bool movementDone { private set; get; }
 
@@ -43,6 +44,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
+        angleToReach = ConfigData.Instance().angle;
         movementDone = false;
     }
 
@@ -56,7 +58,7 @@ public class InputManager : MonoBehaviour
                 SetInitialInclination();
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBallHit < GameManager.Instance.maxBalls)
+            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && !GameManager.Instance.RoundFinished())
             {
                 // golpear
                 if (GameManager.Instance.ballCreated)
@@ -73,8 +75,7 @@ public class InputManager : MonoBehaviour
                 timeBetweenSaves -= Time.deltaTime;
             else
             {
-                Debug.Log($"Dato guardado: ({Time.time}, {currentInclination})");
-                PlayerData.Instance().rawInput.Add((Time.time, currentInclination));
+                PlayerData.Instance().AddRawInput(Time.time, currentInclination);
                 timeBetweenSaves = 1f;
             }
 
@@ -128,7 +129,6 @@ public class InputManager : MonoBehaviour
     private void SetInitialInclination()
     {
         initialAngle = CalculateInclination();
-        Debug.Log("INITIAL: " + initialAngle);
     }
 }
 

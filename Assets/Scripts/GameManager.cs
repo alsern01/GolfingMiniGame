@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,8 +12,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region GAME CONFIG VALUES
-    public int numBallHit = 0;
-    public int maxBalls = 10;
+    public int numBallHit { get; private set; } = 0;
+    public int maxBalls { get; private set; } = 0;
+
+    private int maxRounds;
+    private int rounds = 0;
     #endregion
 
     #region GAME STATE VALUES
@@ -49,6 +53,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        maxRounds = ConfigData.Instance().totalSeries;
+        maxBalls = ConfigData.Instance().totalReps;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -71,15 +81,9 @@ public class GameManager : MonoBehaviour
         return _score;
     }
 
-    public void StartGame()
+    public int GetRoundsLeft()
     {
-        playing = true;
-    }
-
-    public void StopGame()
-    {
-        clientConnected = false;
-        playing = false;
+        return maxRounds - rounds;
     }
 
     private void HitAnimation()
@@ -88,9 +92,52 @@ public class GameManager : MonoBehaviour
         numBallHit++;
     }
 
+    public void StartRound()
+    {
+        numBallHit = 0;
+        UIManager.Instance.ShowBallsToHit();
+        UIManager.Instance.UpdateRoundsText();
+        playing = true;
+    }
+
+    public void EndRound()
+    {
+        rounds++;
+        playing = false;
+        if (rounds < maxRounds)
+        {
+            Invoke("ResetUI", 2.0f);
+        }
+        else
+        {
+            EndGame();
+        }
+    }
+
+    private void ResetUI()
+    {
+        UIManager.Instance.StartCountdown(2f);
+        UIManager.Instance.ClearBallImages();
+    }
+
     public bool RoundFinished()
     {
         return numBallHit >= maxBalls;
+    }
+
+    public void StopGame()
+    {
+        clientConnected = false;
+        playing = false;
+    }
+
+    private void EndGame()
+    {
+        UIManager.Instance.EnableConnectionPanel();
+        playing = false;
+        PlayerData.Instance().totalScore = _score;
+        PlayerData.Instance().gameTime = Time.time;
+        PlayerData.Instance().SaveData();
     }
 
 }

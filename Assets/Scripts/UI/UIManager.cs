@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image uiBallPrefab;
     [SerializeField] private Sprite uiHittedBall;
     [SerializeField] private Sprite uiHittedBomb;
+    [SerializeField] private TextMeshProUGUI roundText;
 
     private List<Image> uiBallImages = new List<Image>();
 
@@ -43,7 +44,6 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        ShowBallsToHit();
     }
 
     void Update()
@@ -71,12 +71,12 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void StartCountdown()
+    public void StartCountdown(float countdown)
     {
         infoText.gameObject.SetActive(false);
         ipText.gameObject.SetActive(false);
 
-        timer.Init(5.0f);
+        timer.Init(countdown);
         timer.gameObject.SetActive(true);
     }
 
@@ -102,6 +102,11 @@ public class UIManager : MonoBehaviour
         scoreText.SetText($"{GameManager.Instance.GetScore()}");
     }
 
+    public void UpdateRoundsText()
+    {
+        roundText.SetText($"{GameManager.Instance.GetRoundsLeft()}");
+    }
+
     public void ShowBallsToHit()
     {
         int totalBalls = GameManager.Instance.maxBalls; // Número total de imágenes a mostrar
@@ -118,6 +123,16 @@ public class UIManager : MonoBehaviour
             spawnedUiBall.rectTransform.anchoredPosition = new Vector2(x, y);
             uiBallImages.Add(spawnedUiBall);
         }
+    }
+
+    public void ClearBallImages()
+    {
+        foreach (var image in uiBallImages)
+        {
+            Destroy(image.gameObject);
+        }
+
+        uiBallImages.Clear();
     }
 
     public void ChangeHitImageSprite(int index, bool bomb)

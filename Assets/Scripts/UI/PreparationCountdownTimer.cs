@@ -7,6 +7,7 @@ public class PreparationCountdownTimer : MonoBehaviour
 {
     private float timeLeft;
     private TextMeshProUGUI timerText;
+    private bool countdownFinished = false;
 
     void Start()
     {
@@ -21,8 +22,9 @@ public class PreparationCountdownTimer : MonoBehaviour
             timeLeft -= Time.deltaTime;
             timerText.SetText(string.Format("{0:0}", timeLeft));
         }
-        else
+        else if (!countdownFinished)
         {
+            countdownFinished = true;
             timerText.SetText("YA!!");
             Invoke("OnCountdownEnd", 1.0f);
         }
@@ -31,13 +33,15 @@ public class PreparationCountdownTimer : MonoBehaviour
 
     private void OnCountdownEnd()
     {
-        GameManager.Instance.StartGame();
+        GameManager.Instance.StartRound();
         UIManager.Instance.DisableConnectionPanel();
         this.gameObject.SetActive(false);
     }
 
     public void Init(float prepTime)
     {
+        UIManager.Instance.EnableConnectionPanel();
         timeLeft = prepTime;
+        countdownFinished = false;
     }
 }

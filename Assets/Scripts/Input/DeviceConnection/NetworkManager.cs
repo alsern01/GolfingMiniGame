@@ -51,16 +51,16 @@ public class NetworkManager : MonoBehaviour
 
 
 
-        //#if UNITY_EDITOR
-        //        GameManager.Instance.clientConnected = true;
-        //        UIManager.Instance.StartCountdown();
-        //#elif UNITY_STANDALONE
-        //                Server.ClientConnected += OnClientConnected;
-        //                Server.ClientDisconnected += OnClientDisconnected;
-        //#endif
+#if UNITY_EDITOR
+        GameManager.Instance.clientConnected = true;
+        UIManager.Instance.StartCountdown(2f);
+#elif UNITY_STANDALONE
+                        Server.ClientConnected += OnClientConnected;
+                        Server.ClientDisconnected += OnClientDisconnected;
+#endif
 
-        Server.ClientConnected += OnClientConnected;
-        Server.ClientDisconnected += OnClientDisconnected;
+        //Server.ClientConnected += OnClientConnected;
+        //Server.ClientDisconnected += OnClientDisconnected;
 
         Server.Start(port, maxClientCount);
 
@@ -104,7 +104,7 @@ public class NetworkManager : MonoBehaviour
     private void OnClientConnected(object sender, EventArgs e)
     {
         GameManager.Instance.clientConnected = true;
-        UIManager.Instance.StartCountdown();
+        UIManager.Instance.StartCountdown(10.0f);
     }
 
     private void OnClientDisconnected(object sender, EventArgs e)

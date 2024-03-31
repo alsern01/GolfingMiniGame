@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallAnimation : StateMachineBehaviour
@@ -9,6 +7,11 @@ public class BallAnimation : StateMachineBehaviour
     {
         GameManager.Instance.playerAnim = false;
         Destroy(animator.gameObject);
+
+        if (GameManager.Instance.RoundFinished())
+        {
+            GameManager.Instance.EndRound();
+        }
     }
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

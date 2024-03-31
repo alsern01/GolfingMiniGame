@@ -1,27 +1,39 @@
-using System.Collections;
-using System.IO;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
 
+[Serializable]
 public class PlayerData
 {
     private static PlayerData instance;
 
-    public List<(float TimeStamp, float Angle)> rawInput; // (timeStamp, angle)
+    [Serializable]
+    public struct RawInputData
+    {
+        public float TimeStamp;
+        public float Angle;
+    }
+
+    [SerializeField] private List<RawInputData> rawInput;
     public int totalBallHit;
     public int totalBombHit;
     public float gameTime;
-    public float totalScore;
+    public int totalScore;
 
     private PlayerData()
     {
-        rawInput = new List<(float TimeStamp, float Angle)>();
+        rawInput = new List<RawInputData>();
+        totalBallHit = 0;
+        totalBombHit = 0;
+        totalScore = 0;
+        gameTime = 0;
     }
+
     public static PlayerData Instance()
     {
-
         if (instance == null)
         {
             instance = new PlayerData();
@@ -31,7 +43,9 @@ public class PlayerData
 
     private string ToJson()
     {
-        return JsonUtility.ToJson(this);
+        string json = JsonUtility.ToJson(this);
+        // Devuelve un json identado para que sea mas visual
+        return JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented);
     }
 
     public bool SaveData()
@@ -40,7 +54,9 @@ public class PlayerData
 
         try
         {
-            File.WriteAllText(filePath, ToJson());
+            string jsonText = ToJson();
+            Debug.Log($"Datos guardados: {jsonText}");
+            File.WriteAllText(filePath, jsonText);
             return true;
         }
         catch (Exception e)
@@ -48,5 +64,11 @@ public class PlayerData
             Debug.LogError($"Fallo al escribir en {filePath} -> Exception: {e}");
             return false;
         }
+    }
+
+    public void AddRawInput(float timeStamp, float angle)
+    {
+        rawInput.Add(new RawInputData { TimeStamp = timeStamp, Angle = angle });
+        Debug.Log($"Array Size: {rawInput.Count}, Ultimo -> {rawInput.LastOrDefault().TimeStamp}, {rawInput.LastOrDefault().Angle}");
     }
 }
