@@ -35,8 +35,6 @@ public class GameManager : MonoBehaviour
     public bool enPausa = false;
     #endregion
 
-    [SerializeField] private GameObject preparationCountdownTimer;
-
 
     private void Awake()
     {
