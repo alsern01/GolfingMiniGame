@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite uiHittedBall;
     [SerializeField] private Sprite uiHittedBomb;
     [SerializeField] private TextMeshProUGUI roundText;
+    [SerializeField] private GameObject ipPanel;
 
     private List<Image> uiBallImages = new List<Image>();
 
@@ -73,8 +74,7 @@ public class UIManager : MonoBehaviour
 
     public void StartCountdown(float countdown)
     {
-        infoText.gameObject.SetActive(false);
-        ipText.gameObject.SetActive(false);
+        ipPanel.SetActive(false);
 
         timer.Init(countdown);
         timer.gameObject.SetActive(true);
@@ -82,8 +82,7 @@ public class UIManager : MonoBehaviour
 
     public void StopCountdown()
     {
-        infoText.gameObject.SetActive(true);
-        ipText.gameObject.SetActive(true);
+        ipPanel.SetActive(true);
 
         timer.gameObject.SetActive(false);
     }

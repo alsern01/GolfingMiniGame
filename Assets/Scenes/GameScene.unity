@@ -675,6 +675,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60077720}
   m_CullTransparentMesh: 1
+--- !u!1 &63207951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4611242699832167563, guid: ff22beda2934fd2499ba01f2f8e3033d, type: 3}
+  m_PrefabInstance: {fileID: 4030279232369709508}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &77752981
 GameObject:
   m_ObjectHideFlags: 0
@@ -9490,6 +9495,7 @@ MonoBehaviour:
   uiHittedBall: {fileID: 21300000, guid: 70283a1148d563241925f3fb3c0a5c17, type: 3}
   uiHittedBomb: {fileID: 21300000, guid: 0d4b36f7b10dc8745a0971f404ccfed6, type: 3}
   roundText: {fileID: 475175021}
+  ipPanel: {fileID: 63207951}
 --- !u!224 &1350038931
 RectTransform:
   m_ObjectHideFlags: 0
