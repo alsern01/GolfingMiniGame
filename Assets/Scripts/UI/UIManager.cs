@@ -17,6 +17,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite uiHittedBomb;
     [SerializeField] private TextMeshProUGUI roundText;
     [SerializeField] private GameObject ipPanel;
+    [SerializeField] private Image arrowIndicator;
+    [SerializeField] private Sprite upArrow;
+    [SerializeField] private Sprite downArrow;
+
+    [SerializeField] private GameObject endGamePanel;
 
     private List<Image> uiBallImages = new List<Image>();
 
@@ -45,6 +50,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        endGamePanel.SetActive(false);
+
     }
 
     void Update()
@@ -56,13 +63,20 @@ public class UIManager : MonoBehaviour
     {
         movementSlider.value = value;
 
-        if (value >= 1f)
+        if (value >= 1f && InputManager.Instance.movementDone)
         {
             movementSlider.fillRect.GetComponent<Image>().color = Color.blue;
+            arrowIndicator.sprite = downArrow;
+        }
+        else if (!InputManager.Instance.movementDone)
+        {
+            movementSlider.fillRect.GetComponent<Image>().color = Color.yellow;
+            arrowIndicator.sprite = upArrow;
         }
         else
         {
             movementSlider.fillRect.GetComponent<Image>().color = Color.red;
+
         }
     }
 
@@ -144,5 +158,10 @@ public class UIManager : MonoBehaviour
                 uiBallImages[index].sprite = uiHittedBall;
 
         }
+    }
+
+    public void ShowEndGamePanel()
+    {
+        endGamePanel.SetActive(true);
     }
 }

@@ -55,8 +55,8 @@ public class NetworkManager : MonoBehaviour
         GameManager.Instance.clientConnected = true;
         UIManager.Instance.StartCountdown(2f);
 #elif UNITY_STANDALONE
-                        Server.ClientConnected += OnClientConnected;
-                        Server.ClientDisconnected += OnClientDisconnected;
+                                Server.ClientConnected += OnClientConnected;
+                                Server.ClientDisconnected += OnClientDisconnected;
 #endif
 
         //Server.ClientConnected += OnClientConnected;

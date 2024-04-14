@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -131,11 +132,21 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        UIManager.Instance.EnableConnectionPanel();
+        UIManager.Instance.ShowEndGamePanel();
         playing = false;
         PlayerData.Instance().totalScore = _score;
         PlayerData.Instance().gameTime = Time.time;
         PlayerData.Instance().SaveData();
     }
 
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

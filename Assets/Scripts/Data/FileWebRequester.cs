@@ -1,12 +1,23 @@
 using System.Collections;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class FileWebRequester : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Image panel;
+
     void Start()
     {
+        if (text != null)
+            text.gameObject.SetActive(false);
+
+        if (panel != null)
+            panel.gameObject.SetActive(false);
+
     }
 
 
@@ -30,14 +41,30 @@ public class FileWebRequester : MonoBehaviour
         if (request.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(request.error);
+
+            if (text != null)
+            {
+                text.gameObject.SetActive(true);
+                panel.gameObject.SetActive(true);
+                text.text = "No existe el nombre de usuario";
+            }
         }
         else
         {
             // Show results as text
             Debug.Log(request.downloadHandler.text);
+            Debug.Log($"Nombre del archivo: {filename}");
 
-            string savePath = $"{Application.persistentDataPath}/{filename}";
-            File.WriteAllText(savePath, request.downloadHandler.text);
+            if (filename != "")
+            {
+                string savePath = $"{Application.persistentDataPath}/{filename}";
+                File.WriteAllText(savePath, request.downloadHandler.text);
+            }
+            if (text != null)
+            {
+                text.color = Color.green;
+                text.text = "Configuracion aplicada";
+            }
         }
     }
 
