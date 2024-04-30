@@ -46,6 +46,7 @@ public class FileWebRequester : MonoBehaviour
             {
                 text.gameObject.SetActive(true);
                 panel.gameObject.SetActive(true);
+                text.color = new Color(255, 70, 70, 255);
                 text.text = "No existe el nombre de usuario";
             }
         }
@@ -62,6 +63,8 @@ public class FileWebRequester : MonoBehaviour
             }
             if (text != null)
             {
+                text.gameObject.SetActive(true);
+                panel.gameObject.SetActive(true);
                 text.color = Color.green;
                 text.text = "Configuracion aplicada";
             }

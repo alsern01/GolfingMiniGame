@@ -53,6 +53,7 @@ public class NetworkManager : MonoBehaviour
 
 #if UNITY_EDITOR
         GameManager.Instance.clientConnected = true;
+        GameManager.Instance.gameStartTime = Time.time;
         UIManager.Instance.StartCountdown(2f);
 #elif UNITY_STANDALONE
                                 Server.ClientConnected += OnClientConnected;
@@ -104,6 +105,7 @@ public class NetworkManager : MonoBehaviour
     private void OnClientConnected(object sender, EventArgs e)
     {
         GameManager.Instance.clientConnected = true;
+        GameManager.Instance.gameStartTime = Time.time;
         UIManager.Instance.StartCountdown(10.0f);
     }
 

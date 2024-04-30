@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,8 +9,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region GAME CONFIG VALUES
+    public string PlayerId { get; set; }
     public int numBallHit { get; private set; } = 0;
     public int maxBalls { get; private set; } = 0;
+    public float angle { get; private set; } = 0f;
 
     private int maxRounds;
     private int rounds = 0;
@@ -34,6 +32,7 @@ public class GameManager : MonoBehaviour
     public bool playing { get; private set; }
 
     public bool enPausa = false;
+    public float gameStartTime { get; set; }
     #endregion
 
 
@@ -45,21 +44,16 @@ public class GameManager : MonoBehaviour
 
             playing = false;
             playerAnim = false;
+
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 
     private void Start()
-    {
-        maxRounds = ConfigData.Instance().totalSeries;
-        maxBalls = ConfigData.Instance().totalReps;
-    }
-
-    // Update is called once per frame
-    void Update()
     {
 
     }
@@ -135,18 +129,17 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.ShowEndGamePanel();
         playing = false;
         PlayerData.Instance().totalScore = _score;
-        PlayerData.Instance().gameTime = Time.time;
+        PlayerData.Instance().gameTime = Time.time - gameStartTime;
         PlayerData.Instance().SaveData();
+
+        RealmController.Instance.SetScore(PlayerId, _score);
+        RealmController.Instance.SetGameTime(PlayerId, _score);
     }
 
-
-    public void BackToMenu()
+    public void LoadConfig()
     {
-        SceneManager.LoadScene("MenuScene");
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
+        maxBalls = RealmController.Instance.GetRepsForPlayer(PlayerId);
+        maxRounds = RealmController.Instance.GetSeriesForPlayer(PlayerId);
+        angle = RealmController.Instance.GetAngleForPlayer(PlayerId);
     }
 }

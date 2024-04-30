@@ -8,10 +8,10 @@ using UnityEngine.UI;
 public class InputManager : MonoBehaviour
 {
     private float initialAngle = float.NegativeInfinity;
-    private float angleToReach = 0f;
+    public float angleToReach = 0f;
     private Vector3 accel = Vector3.zero;
-    [SerializeField] private float timeBetweenSaves = 1f;
-    [SerializeField] private float minAngleOffset = 0.5f;
+    private float timeBetweenSaves = 1f;
+    private float minAngleOffset = 0.5f;
 
     public bool movementDone { private set; get; }
 
@@ -44,7 +44,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-        angleToReach = ConfigData.Instance().angle;
+        angleToReach = GameManager.Instance.angle;
         movementDone = false;
     }
 
@@ -75,7 +75,16 @@ public class InputManager : MonoBehaviour
                 timeBetweenSaves -= Time.deltaTime;
             else
             {
-                PlayerData.Instance().AddRawInput(Time.time, currentInclination);
+                float currentTime = Time.time - GameManager.Instance.gameStartTime;
+                PlayerData.Instance().AddRawInput(currentTime, currentInclination);
+
+                RawInputData rawInput = new RawInputData
+                {
+                    TimeStamp = currentTime,
+                    Angle = currentInclination,
+                };
+                RealmController.Instance.AddRawInput(GameManager.Instance.PlayerId, rawInput);
+
                 timeBetweenSaves = 1f;
             }
 

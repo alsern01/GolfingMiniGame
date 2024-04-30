@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndGamePanel : MonoBehaviour
 {
@@ -9,4 +10,13 @@ public class EndGamePanel : MonoBehaviour
         scoreText.text = GameManager.Instance.GetScore().ToString();
     }
 
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
