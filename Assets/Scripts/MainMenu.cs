@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField userField;
-    [SerializeField] private TextMeshProUGUI text;
-
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private Image panel;
 
@@ -16,9 +13,6 @@ public class MainMenu : MonoBehaviour
 
     public void LoadUser()
     {
-        //string user = RealmController.Instance.GetId(userField.text);
-        //RealmController.Instance.UserLogin();
-
         if (RealmController.Instance.UserLogin())
         {
             GameManager.Instance.PlayerId = RealmController.Instance.PlayerId;

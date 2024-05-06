@@ -1,49 +1,56 @@
+using System;
 using System.Collections.Generic;
 using Realms;
-using System;
 using MongoDB.Bson;
 
-public class GameData : RealmObject
+public partial class PlayerData : IRealmObject
 {
     [MapTo("_id")]
     [PrimaryKey]
     public ObjectId Id { get; set; }
 
-    [MapTo("playerId")]
-    [Required]
-    public string PlayerId { get; set; }
-
-    #region PLAYER SCORE
-    [MapTo("rawInputList")]
-    public IList<RawInputData> RawInputList { get; }
-
-    [MapTo("totalBallHit")]
-    public int TotalBallHit { get; set; }
-
-    [MapTo("totalBombHit")]
-    public int TotalBombHit { get; set; }
+    [MapTo("angle")]
+    public float Angle { get; set; }
 
     [MapTo("gameTime")]
     public float GameTime { get; set; }
 
-    [MapTo("totalScore")]
-    public int TotalScore { get; set; }
+    [MapTo("name")]
+    public string Name { get; set; }
 
-    //public GameResultsData GameResults { get; set; }
-    #endregion
+    [MapTo("playerId")]
+    public string PlayerId { get; set; }
 
-    #region CONFIG DATA
-    [MapTo("angle")]
-    public float Angle { get; set; }
-    [MapTo("totalSeries")]
-    public int TotalSeries { get; set; }
+    [MapTo("rawInput")]
+    public IList<RawInputData> RawInput { get; }
+
+    [MapTo("totalBallHit")]
+    public int? TotalBallHit { get; set; }
+
+    [MapTo("totalBombHit")]
+    public int? TotalBombHit { get; set; }
+
     [MapTo("totalReps")]
     public int TotalReps { get; set; }
-    #endregion
 
-    public GameData()
-    {
-        PlayerId = "Default";
-        RawInputList = new List<RawInputData>();
-    }
+    [MapTo("totalScore")]
+    public int? TotalScore { get; set; }
+
+    [MapTo("totalSeries")]
+    public int TotalSeries { get; set; }
+}
+
+public partial class RawInputData : IRealmObject
+{
+    [MapTo("_id")]
+    [PrimaryKey]
+    public ObjectId Id { get; set; }
+    [MapTo("angle")]
+    public float Angle { get; set; }
+
+    [MapTo("playerId")]
+    public string PlayerId { get; set; }
+
+    [MapTo("timeStamp")]
+    public float TimeStamp { get; set; }
 }

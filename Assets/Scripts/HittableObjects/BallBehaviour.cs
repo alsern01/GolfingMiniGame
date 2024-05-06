@@ -31,13 +31,11 @@ public class BallBehaviour : MonoBehaviour
 
             if (pointsGiven > 0)
             {
-                PlayerData.Instance().totalBallHit++;
-                RealmController.Instance.IncreaseBallHit(GameManager.Instance.PlayerId);
+                GameManager.Instance.TotalBallHit++;
             }
             else
             {
-                PlayerData.Instance().totalBombHit++;
-                RealmController.Instance.IncreaseBombHit(GameManager.Instance.PlayerId);
+                GameManager.Instance.TotalBombHit++;
             }
         }
     }

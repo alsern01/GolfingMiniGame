@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,11 +61,6 @@ public class InputManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && !GameManager.Instance.RoundFinished())
             {
-                // golpear
-                if (GameManager.Instance.ballCreated)
-                {
-                    //GameManager.Instance.numBallHit++;
-                }
                 PlayerMovement();
             }
 
@@ -76,10 +72,11 @@ public class InputManager : MonoBehaviour
             else
             {
                 float currentTime = Time.time - GameManager.Instance.gameStartTime;
-                PlayerData.Instance().AddRawInput(currentTime, currentInclination);
 
                 RawInputData rawInput = new RawInputData
                 {
+                    Id = ObjectId.GenerateNewId(),
+                    PlayerId = GameManager.Instance.PlayerId,
                     TimeStamp = currentTime,
                     Angle = currentInclination,
                 };

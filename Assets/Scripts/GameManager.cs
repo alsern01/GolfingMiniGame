@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     public bool ballHit { get; set; }
     public bool hitAnim { get; set; }
     public bool playerAnim { get; set; }
+
+    public int TotalBallHit { get; set; }
+    public int TotalBombHit { get; set; }
     #endregion
 
     #region GAME FLOW VARIABLES
@@ -128,12 +131,12 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.ShowEndGamePanel();
         playing = false;
-        PlayerData.Instance().totalScore = _score;
-        PlayerData.Instance().gameTime = Time.time - gameStartTime;
-        PlayerData.Instance().SaveData();
 
+        // save data to database
         RealmController.Instance.SetScore(PlayerId, _score);
-        RealmController.Instance.SetGameTime(PlayerId, _score);
+        RealmController.Instance.SetBallHit(PlayerId, TotalBallHit);
+        RealmController.Instance.SetBombHit(PlayerId, TotalBombHit);
+        RealmController.Instance.SetGameTime(PlayerId, Time.time - gameStartTime);
     }
 
     public void LoadConfig()
