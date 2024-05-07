@@ -10,7 +10,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Image panel;
 
 
-
     public void LoadUser()
     {
         if (RealmController.Instance.UserLogin())
@@ -21,7 +20,7 @@ public class MainMenu : MonoBehaviour
             infoText.gameObject.SetActive(true);
             panel.gameObject.SetActive(true);
             infoText.color = Color.green;
-            infoText.text = "Configuracion aplicada";
+            infoText.text = "Nombre de usuario correcto. Empezando...";
 
             Invoke("GameScene", 2f);
         }
@@ -30,11 +29,11 @@ public class MainMenu : MonoBehaviour
             infoText.gameObject.SetActive(true);
             panel.gameObject.SetActive(true);
             infoText.color = Color.red;
-            infoText.text = "No existe el nombre de usuario";
+            infoText.text = "Nombre de usuario incorrecto.";
         }
     }
 
-    public void OptionsBoton()
+    public void OptionsButton()
     {
         //SceneManager.LoadScene("OptionsScene");
     }

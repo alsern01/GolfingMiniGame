@@ -76,6 +76,7 @@ public class RealmController : MonoBehaviour
         if (data != null)
         {
             Debug.Log("¡Inicio de sesión exitoso!");
+            ClearRawInput(PlayerId);
             return true;
         }
         else
@@ -125,6 +126,18 @@ public class RealmController : MonoBehaviour
             return dataModel.TotalReps;
         }
         return 1;
+    }
+
+    private void ClearRawInput(string id)
+    {
+        PlayerData dataModel = GetPlayerData(id);
+        if (dataModel != null)
+        {
+            _realm.Write(() =>
+            {
+                dataModel.RawInput.Clear();
+            });
+        }
     }
 
     public void AddRawInput(string id, RawInputData rawInput)
