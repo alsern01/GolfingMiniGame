@@ -6,10 +6,12 @@ public class BallBombSpawner : MonoBehaviour
 {
     public GameObject ball, bomb;
     public MenuPausa menuP;
+    private bool bombLastIntanstiated;
 
     // Start is called before the first frame update
     void Start()
     {
+        bombLastIntanstiated = false;
     }
 
     // Update is called once per frame
@@ -27,16 +29,35 @@ public class BallBombSpawner : MonoBehaviour
 
     private void GenerateObject()
     {
-        if (Random.Range(0.0f, 1.0f) > 0.2f)
+        if (Random.Range(0, 10) > 3)
         {
-            // Spawnea pelota
-            Instantiate(ball, this.transform.position, Quaternion.identity);
+            GenerateBall();
         }
         else
         {
-            // Spawnea bomba
-            GameObject instance = Instantiate(bomb, this.transform.position, Quaternion.identity);
+            if (!bombLastIntanstiated)
+            {
+                GenerateBomb();
+            }
+            else
+            {
+                GenerateBall();
+            }
         }
+    }
+
+    // Spawnea pelota
+    private void GenerateBall()
+    {
+        Instantiate(ball, this.transform.position, Quaternion.identity);
+        bombLastIntanstiated = false;
+    }
+
+    // Spawnea bomba
+    private void GenerateBomb()
+    {
+        Instantiate(bomb, this.transform.position, Quaternion.identity);
+        bombLastIntanstiated = true;
     }
 
 }

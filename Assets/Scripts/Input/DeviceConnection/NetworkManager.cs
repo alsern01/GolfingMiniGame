@@ -2,7 +2,6 @@ using Riptide;
 using Riptide.Utils;
 using UnityEngine;
 using System.Net;
-using Riptide.Transports;
 using System;
 
 public enum MessageID
@@ -34,8 +33,6 @@ public class NetworkManager : MonoBehaviour
 
     public string ipAddress { get; private set; }
 
-    public static Vector3 orientation { get; private set; }
-
     [SerializeField] private ushort port;
     [SerializeField] private ushort maxClientCount;
 
@@ -44,7 +41,6 @@ public class NetworkManager : MonoBehaviour
         Instance = this;
 
         ipAddress = GetLocalIPAddress();
-        Debug.Log("Device local IP address is: " + ipAddress);
     }
 
     private void Start()
@@ -55,17 +51,17 @@ public class NetworkManager : MonoBehaviour
 
 
 
-        //#if UNITY_EDITOR
-        //        Debug.Log("Client connected");
-        //        GameManager.Instance.clientConnected = true;
-        //        UIManager.Instance.StartCountdown();
-        //#elif UNITY_STANDALONE
-        //        Server.ClientConnected += OnClientConnected;
-        //        Server.ClientDisconnected += OnClientDisconnected;
-        //#endif
+#if UNITY_EDITOR
+        GameManager.Instance.clientConnected = true;
+        GameManager.Instance.gameStartTime = Time.time;
+        UIManager.Instance.StartCountdown(2f);
+#elif UNITY_STANDALONE
+                                Server.ClientConnected += OnClientConnected;
+                                Server.ClientDisconnected += OnClientDisconnected;
+#endif
 
-        Server.ClientConnected += OnClientConnected;
-        Server.ClientDisconnected += OnClientDisconnected;
+        //Server.ClientConnected += OnClientConnected;
+        //Server.ClientDisconnected += OnClientDisconnected;
 
         Server.Start(port, maxClientCount);
 
@@ -85,13 +81,8 @@ public class NetworkManager : MonoBehaviour
     [MessageHandler((ushort)MessageID.orientation)]
     private static void ReceiveMesageFromDevice(ushort fromClientId, Message message)
     {
-        orientation = message.GetVector3();
+        Vector3 orientation = message.GetVector3();
         InputManager.Instance.SetAccelVector(orientation);
-    }
-
-    public Vector3 getDeviceOrientation()
-    {
-        return orientation;
     }
 
     private string GetLocalIPAddress()
@@ -113,14 +104,13 @@ public class NetworkManager : MonoBehaviour
 
     private void OnClientConnected(object sender, EventArgs e)
     {
-        Debug.Log("Client connected");
         GameManager.Instance.clientConnected = true;
-        UIManager.Instance.StartCountdown();
+        GameManager.Instance.gameStartTime = Time.time;
+        UIManager.Instance.StartCountdown(10.0f);
     }
 
     private void OnClientDisconnected(object sender, EventArgs e)
     {
-        Debug.Log("Client disconnected");
         UIManager.Instance.EnableConnectionPanel();
         UIManager.Instance.StopCountdown();
         GameManager.Instance.StopGame();

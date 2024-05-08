@@ -1,5 +1,7 @@
+using MongoDB.Bson;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,14 +9,14 @@ using UnityEngine.UI;
 public class InputManager : MonoBehaviour
 {
     private float initialAngle = float.NegativeInfinity;
-    private float angleToReach = 30f;
-
-    public float minAngleOffset = 5.0f;
+    public float angleToReach = 0f;
+    private Vector3 accel = Vector3.zero;
+    private float timeBetweenSaves = 1f;
+    private float minAngleOffset = 0.5f;
 
     public bool movementDone { private set; get; }
 
 
-    private Vector3 accel = Vector3.zero;
 
     private static InputManager instance;
     public static InputManager Instance
@@ -43,6 +45,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
+        angleToReach = GameManager.Instance.angle;
         movementDone = false;
     }
 
@@ -56,19 +59,32 @@ public class InputManager : MonoBehaviour
                 SetInitialInclination();
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && GameManager.Instance.numBallHit < GameManager.Instance.maxBalls)
+            if (Input.GetKeyDown(KeyCode.Space) && !GameManager.Instance.enPausa && !GameManager.Instance.RoundFinished())
             {
-                // golpear
-                if (GameManager.Instance.ballCreated)
-                {
-                    GameManager.Instance.numBallHit++;
-                    UIManager.Instance.ShowBallHitFeedback();
-                }
                 PlayerMovement();
             }
 
 
             float currentInclination = CalculateInclination();
+
+            if (timeBetweenSaves > 0)
+                timeBetweenSaves -= Time.deltaTime;
+            else
+            {
+                float currentTime = Time.time - GameManager.Instance.gameStartTime;
+
+                RawInputData rawInput = new RawInputData
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    PlayerId = GameManager.Instance.PlayerId,
+                    TimeStamp = currentTime,
+                    Angle = currentInclination,
+                };
+                RealmController.Instance.AddRawInput(GameManager.Instance.PlayerId, rawInput);
+
+                timeBetweenSaves = 1f;
+            }
+
             float movementPercent = Mathf.Clamp01((currentInclination - initialAngle) / (angleToReach + initialAngle));
             UIManager.Instance.UpdateSlider(movementPercent);
 
@@ -105,6 +121,11 @@ public class InputManager : MonoBehaviour
         accel = orientation;
     }
 
+    public void ResetMovement()
+    {
+        movementDone = false;
+    }
+
     private void PlayerMovement()
     {
         GameManager.Instance.playerAnim = true;
@@ -114,7 +135,6 @@ public class InputManager : MonoBehaviour
     private void SetInitialInclination()
     {
         initialAngle = CalculateInclination();
-        Debug.Log("INITIAL: " + initialAngle);
     }
 }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallBehaviour : MonoBehaviour
@@ -23,10 +24,19 @@ public class BallBehaviour : MonoBehaviour
     {
         if (GameManager.Instance.ballHit)
         {
-            //Destroy(this.gameObject);
             animator.enabled = true;
             GameManager.Instance.AddPoints(pointsGiven);
             GameManager.Instance.ballHit = false;
+            UIManager.Instance.ChangeHitImageSprite(GameManager.Instance.numBallHit - 1, pointsGiven < 0 ? true : false);
+
+            if (pointsGiven > 0)
+            {
+                GameManager.Instance.TotalBallHit++;
+            }
+            else
+            {
+                GameManager.Instance.TotalBombHit++;
+            }
         }
     }
 
