@@ -4,26 +4,16 @@ using UnityEngine;
 
 public class LogicaOpciones : MonoBehaviour
 {
-    public ControllerOptions panelOptions;
-    //public GameObject menuPausa;
+    [SerializeField] private ControllerOptions panelOptions;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        //panelOptions = GameObject.FindGameObjectWithTag("Opciones").GetComponent<ControllerOptions>();
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        panelOptions = FindAnyObjectByType<ControllerOptions>();
     }
 
     public void ShowOptions()
     {
-        //menuPausa.SetActive(false);
         panelOptions.pantallaOpciones.SetActive(true);
-        
+
     }
 }

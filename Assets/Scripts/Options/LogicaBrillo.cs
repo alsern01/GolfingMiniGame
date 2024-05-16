@@ -20,12 +20,6 @@ public class LogicaBrillo : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void ChangeSlider(float valor)
     {
         sliderValue = valor;

@@ -27,6 +27,7 @@ public class MenuPausa : MonoBehaviour
     {
         /*UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();*/
+        ContinuarBoton();
         SceneManager.LoadScene("MenuScene");
     }
 }

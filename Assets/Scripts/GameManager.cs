@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     public bool clientConnected { get; set; }
     public bool playing { get; private set; }
 
-    public bool enPausa = false;
+    public bool enPausa { get; set; }
     public float gameStartTime { get; set; }
     #endregion
 
@@ -59,6 +59,12 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
 
+    }
+
+    public void OnSceneChange(Scene scene, LoadSceneMode loadMode)
+    {
+        enPausa = false;
+        playing = false;
     }
 
     public void AddPoints(int numPoints)

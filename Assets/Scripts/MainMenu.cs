@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private Image panel;
 
+
+    private void Start()
+    {
+        SceneManager.sceneLoaded += GameManager.Instance.OnSceneChange;
+    }
 
     public void LoadUser()
     {
@@ -22,7 +28,7 @@ public class MainMenu : MonoBehaviour
             infoText.color = Color.green;
             infoText.text = "Nombre de usuario correcto. Empezando...";
 
-            Invoke("GameScene", 2f);
+            StartCoroutine(StartGame(2));
         }
         else
         {
@@ -33,18 +39,14 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    public void OptionsButton()
-    {
-        //SceneManager.LoadScene("OptionsScene");
-    }
-
     public void QuitGame()
     {
         Application.Quit();
     }
 
-    private void GameScene()
+    private IEnumerator StartGame(int delay)
     {
+        yield return new WaitForSeconds(delay);
         SceneManager.LoadScene("GameScene");
     }
 }

@@ -53,6 +53,11 @@ public class RealmController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _playerIdField = FindAnyObjectByType<TMPro.TMP_InputField>();
+    }
+
     private void OnDisable()
     {
         if (_realm != null)
@@ -65,8 +70,8 @@ public class RealmController : MonoBehaviour
     {
         if (_playerIdField == null)
         {
-            Debug.LogError("Campo de texto de playerId no está asignado.");
-            return false;
+            Debug.LogWarning("Campo de texto de playerId no está asignado.");
+            _playerIdField = FindAnyObjectByType<TMPro.TMP_InputField>();
         }
 
         PlayerId = _playerIdField.text;
