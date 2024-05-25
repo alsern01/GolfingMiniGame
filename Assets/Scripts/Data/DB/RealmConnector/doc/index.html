@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RealmDatabaseConnector Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #ddd;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #fff;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #444;
+            padding: 10px;
+            border-left: 5px solid #888;
+            overflow-x: auto;
+            color: #eee;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        p,
+        ul,
+        li {
+            color: #ddd;
+        }
+
+        strong {
+            color: #ffab01;
+        }
+
+        .parameter {
+            color: #66ccff;
+        }
+
+        .returns {
+            color: #66ff99;
+        }
+
+        .description {
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>RealmDatabaseConnector Documentation</h1>
+        <p>Singleton class for handling connection and data manipulation in a Realm database.</p>
+
+        <h2>Properties:</h2>
+        <h3>Instance</h3>
+        <p><strong>Type:</strong> <span class="returns"><code>RealmDatabaseConnector</code></p>
+        <p><strong>Description:</strong> Gets the singleton instance of <code>RealmDatabaseConnector</code>.</p>
+
+        <h2>Methods:</h2>
+
+        <h3>ConnectAsync()</h3>
+        <p><strong>Returns:</strong> <span class="returns"> <code> Task&lt;bool&gt;</code></p>
+
+        <p><strong>Description:</strong> Establishes an asynchronous connection to the Realm database.
+            Returns <code>true</code> if the connection is successfully established, <code>false</code> otherwise.</p>
+        <pre><code>public async Task<bool> ConnectAsync()</code></pre>
+
+        <h3>Disconnect()</h3>
+        <p><strong>Description:</strong> Disconnects from the Realm database.</p>
+        <pre><code>public void Disconnect()</code></pre>
+
+        <h3>IsConnected()</h3>
+        <p><strong>Returns:</strong> <span class="returns"> <code> bool</code></p>
+        <p><strong>Description:</strong> Checks if the connection to the database is active. Returns <code>true</code>
+            if
+            connected, <code>false</code> otherwise.</p>
+        <pre><code>public bool IsConnected()</code></pre>
+
+        <h3>GetPlayerData(string playerId, string gameId)</h3>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code><span class="parameter">string</span> playerId</code> - The player identifier.</li>
+            <li><code><span class="parameter">string</span> gameId</code> - The game identifier.</li>
+        </ul>
+        <p><strong>Returns:</strong> <span class="returns"> <code> PlayerData</code></p>
+        <p><strong>Description:</strong> Retrieves player data with the provided player ID and game ID.</p>
+        <pre><code>public PlayerData GetPlayerData(string playerId, string gameId)</code></pre>
+
+        <h3>GetAngleForPlayer(string playerId, string gameId)</h3>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code><span class="parameter">string</span> playerId</code> - The player identifier.</li>
+            <li><code><span class="parameter">string</span> gameId</code> - The game identifier.</li>
+        </ul>
+        <p><strong>Returns:</strong> <span class="returns"> <code> float</code></p>
+        <p><strong>Description:</strong> Retrieves the angle for the player with the provided player ID and game ID.</p>
+        <pre><code>public float GetAngleForPlayer(string playerId, string gameId)</code></pre>
+
+        <h3>GetSeriesForPlayer(string playerId, string gameId)</h3>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code><span class="parameter">string</span> playerId</code> - The player identifier.</li>
+            <li><code><span class="parameter">string</span> gameId</code> - The game identifier.</li>
+        </ul>
+        <p><strong>Returns:</strong> <span class="returns"> <code> int</code></p>
+        <p><strong>Description:</strong> Retrieves the series count for the player with the provided player ID and game
+            ID.
+        </p>
+        <pre><code>public int GetSeriesForPlayer(string playerId, string gameId)</code></pre>
+
+        <h3>GetRepsForPlayer(string playerId, string gameId)</h3>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code><span class="parameter">string</span> playerId</code> - The player identifier.</li>
+            <li><code><span class="parameter">string</span> gameId</code> - The game identifier.</li>
+        </ul>
+        <p><strong>Returns:</strong> <span class="returns"> <code> int</code></p>
+        <p><strong>Description:</strong> Retrieves the repetitions count for the player with the provided player ID and
+            game
+            ID.</p>
+        <pre><code>public int GetRepsForPlayer(string playerId, string gameId)</code></pre>
+
+        <h3>ClearRawInput(string playerId, string gameId)</h3>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code><span class="parameter">string</span> playerId</code> - The player identifier.</li>
+            <li><code><span class="parameter">string</span> gameId</code> - The game identifier.</li>
+        </ul>
+        <p><strong>Description:</strong> Clears the raw input data for the player with the provided player ID and game
+            ID.
+        </p>
+        <pre><code>public void ClearRawInput(string playerId, string gameId)</code></pre>
+
+        <h3>InsertData&lt;T&gt;(string playerId, string gameId, T obj, Action&lt;PlayerData, T&gt; insertionAction)</h3>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code><span class="parameter">string</span> playerId</code> - The player identifier.</li>
+            <li><code><span class="parameter">string</span> gameId</code> - The game identifier.</li>
+            <li><code><span class="parameter">T</span> obj</code> - The value to insert.</li>
+            <li><code><span class="parameter"> Action&lt;PlayerData, T&gt;</span> insertionAction</code> - The action
+                defining how to update the model.
+            </li>
+        </ul>
+        <p><strong>Description:</strong> Inserts or updates generic data into the PlayerData model.</p>
+        <pre><code>public void InsertData&lt;T&gt;(string playerId, string gameId, T obj, Action&lt;PlayerData, T&gt; insertionAction)</code></pre>
+    </div>
+</body>
+
+</html>
