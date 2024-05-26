@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
     public float gameStartTime { get; set; }
     #endregion
 
-
     private void Awake()
     {
         if (_instance == null)
