@@ -34,10 +34,9 @@ public class GameManager : MonoBehaviour
     public bool clientConnected { get; set; }
     public bool playing { get; private set; }
 
-    public bool enPausa = false;
+    public bool enPausa { get; set; }
     public float gameStartTime { get; set; }
     #endregion
-
 
     private void Awake()
     {
@@ -59,6 +58,12 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
 
+    }
+
+    public void OnSceneChange(Scene scene, LoadSceneMode loadMode)
+    {
+        enPausa = false;
+        playing = false;
     }
 
     public void AddPoints(int numPoints)
@@ -131,12 +136,15 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.ShowEndGamePanel();
         playing = false;
+        string dateTime = System.DateTime.UtcNow.ToLocalTime().ToString("dd-MM-yyyy HH:mm");
 
         // save data to database
         RealmController.Instance.SetScore(PlayerId, _score);
         RealmController.Instance.SetBallHit(PlayerId, TotalBallHit);
         RealmController.Instance.SetBombHit(PlayerId, TotalBombHit);
         RealmController.Instance.SetGameTime(PlayerId, Time.time - gameStartTime);
+        RealmController.Instance.SetDateTime(PlayerId, dateTime);
+        RealmController.Instance.SetGameCompleted(PlayerId, true);
     }
 
     public void LoadConfig()

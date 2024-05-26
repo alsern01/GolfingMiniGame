@@ -3,6 +3,8 @@ using Riptide.Utils;
 using UnityEngine;
 using System.Net;
 using System;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 public enum MessageID
 {
@@ -40,7 +42,7 @@ public class NetworkManager : MonoBehaviour
     {
         Instance = this;
 
-        ipAddress = GetLocalIPAddress();
+        ipAddress = GetLocalIPAddressV2();
     }
 
     private void Start()
@@ -55,9 +57,9 @@ public class NetworkManager : MonoBehaviour
         GameManager.Instance.clientConnected = true;
         GameManager.Instance.gameStartTime = Time.time;
         UIManager.Instance.StartCountdown(2f);
-#elif UNITY_STANDALONE
-                                Server.ClientConnected += OnClientConnected;
-                                Server.ClientDisconnected += OnClientDisconnected;
+#else
+                Server.ClientConnected += OnClientConnected;
+                Server.ClientDisconnected += OnClientDisconnected;
 #endif
 
         //Server.ClientConnected += OnClientConnected;
@@ -97,6 +99,44 @@ public class NetworkManager : MonoBehaviour
                 ipAddress = ip.ToString();
                 break;
             }
+        }
+
+        return ipAddress;
+    }
+
+    private string GetLocalIPAddressV2()
+    {
+        string ipAddress = "";
+
+        try
+        {
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.OperationalStatus == OperationalStatus.Up)
+                {
+                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip.Address))
+                        {
+                            ipAddress = ip.Address.ToString();
+                            return ipAddress;
+                        }
+                    }
+                }
+            }
+        }
+        catch (SocketException ex)
+        {
+            Debug.LogError("SocketException caught! Unable to get local IP address: " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Exception caught! Unable to get local IP address: " + ex.Message);
+        }
+
+        if (string.IsNullOrEmpty(ipAddress))
+        {
+            Debug.LogError("No IPv4 address found for the local machine.");
         }
 
         return ipAddress;

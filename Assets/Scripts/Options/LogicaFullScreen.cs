@@ -15,12 +15,6 @@ public class LogicaFullScreen : MonoBehaviour
         ReviewResolution();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void ReviewResolution()
     {
         resolutions = Screen.resolutions;

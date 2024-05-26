@@ -1,23 +1,19 @@
-using Realms;
-using Realms.Sync;
 using UnityEngine;
-using System.Linq;
+using TMPro;
 using System;
-using MongoDB.Bson;
-using System.Threading.Tasks;
 
 public class RealmController : MonoBehaviour
 {
     private static RealmController _instance;
     public static RealmController Instance { get { return _instance; } }
 
-    private Realm _realm;
-    private App _realmApp;
-    private string _realmAppId = "tfg_app-gcscafj";
-
-    [SerializeField] private TMPro.TMP_InputField _playerIdField;
+    private RealmDatabaseConnector _dbConnector;
+    [SerializeField] private TMP_InputField _playerIdField;
 
     public string PlayerId { private set; get; }
+    private string gameId = "hombros - minigolf";
+
+    private bool isConnected;
 
     private async void Awake()
     {
@@ -25,26 +21,15 @@ public class RealmController : MonoBehaviour
         {
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
-            _realmApp = App.Create(_realmAppId);
 
-            try
+            // Obtener la instancia del RealmDatabaseConnector
+            _dbConnector = RealmDatabaseConnector.Instance("tfg_app-gcscafj");
+
+            // Intentar conectar a la base de datos
+            isConnected = await _dbConnector.ConnectAsync();
+            if (!isConnected)
             {
-                await _realmApp.LogInAsync(Credentials.Anonymous());
-                _realm = await Realm.GetInstanceAsync(new FlexibleSyncConfiguration(_realmApp.CurrentUser));
-
-                _realm.Subscriptions.Update(() =>
-                {
-                    var playerData = _realm.All<PlayerData>();
-                    _realm.Subscriptions.Add(playerData);
-
-                    var rawInputData = _realm.All<RawInputData>();
-                    _realm.Subscriptions.Add(rawInputData);
-                });
-                await _realm.Subscriptions.WaitForSynchronizationAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.LogException(ex);
+                Debug.LogError("No se pudo establecer la conexión con la base de datos.");
             }
         }
         else
@@ -53,20 +38,22 @@ public class RealmController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _playerIdField = FindAnyObjectByType<TMP_InputField>();
+    }
+
     private void OnDisable()
     {
-        if (_realm != null)
-        {
-            _realm.Dispose();
-        }
+        _dbConnector.Disconnect();
     }
 
     public bool UserLogin()
     {
         if (_playerIdField == null)
         {
-            Debug.LogError("Campo de texto de playerId no está asignado.");
-            return false;
+            Debug.LogWarning("Campo de texto de playerId no está asignado.");
+            _playerIdField = FindAnyObjectByType<TMP_InputField>();
         }
 
         PlayerId = _playerIdField.text;
@@ -86,117 +73,93 @@ public class RealmController : MonoBehaviour
         }
     }
 
-
     private PlayerData GetPlayerData(string id)
     {
-
-        var dataModel = _realm.All<PlayerData>().ToList();
-        PlayerData playerData = _realm.All<PlayerData>().FirstOrDefault(data => data.PlayerId == id);
-
-        return playerData;
+        return isConnected ? _dbConnector.GetPlayerData(id, gameId) : null;
     }
 
     public float GetAngleForPlayer(string id)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
-        {
-            return dataModel.Angle;
-        }
-        return 0.0f;
+        return isConnected ? _dbConnector.GetAngleForPlayer(id, gameId) : 0.0f;
     }
 
     public int GetSeriesForPlayer(string id)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
-        {
-
-            return dataModel.TotalSeries;
-        }
-        return 1;
+        return isConnected ? _dbConnector.GetSeriesForPlayer(id, gameId) : 1;
     }
 
     public int GetRepsForPlayer(string id)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
-        {
-
-            return dataModel.TotalReps;
-        }
-        return 1;
+        return isConnected ? _dbConnector.GetRepsForPlayer(id, gameId) : 1;
     }
 
     private void ClearRawInput(string id)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
+        if (isConnected)
         {
-            _realm.Write(() =>
-            {
-                dataModel.RawInput.Clear();
-            });
+            _dbConnector.ClearRawInput(id, gameId);
         }
     }
 
     public void AddRawInput(string id, RawInputData rawInput)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
+        if (isConnected)
         {
-            _realm.Write(() =>
+            Action<PlayerData, RawInputData> setRawInput = (playerData, hit) =>
             {
-                dataModel.RawInput.Add(rawInput);
-            });
+                playerData.RawInput.Add(rawInput);
+            };
+
+            _dbConnector.InsertData(id, gameId, rawInput, setRawInput);
         }
     }
 
     public void SetBallHit(string id, int ballHit)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
+        if (isConnected)
         {
-            _realm.Write(() =>
-            {
-                dataModel.TotalBallHit = ballHit;
-            });
+            _dbConnector.InsertData(id, gameId, ballHit, (playerData, hit) => playerData.TotalBallHit = hit);
         }
     }
 
     public void SetBombHit(string id, int bombHit)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
+        if (isConnected)
         {
-            _realm.Write(() =>
-            {
-                dataModel.TotalBombHit = bombHit;
-            });
+            _dbConnector.InsertData(id, gameId, bombHit, (playerData, hit) => playerData.TotalBombHit = hit);
         }
     }
 
     public void SetScore(string id, int score)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
+        if (isConnected)
         {
-            _realm.Write(() =>
-            {
-                dataModel.TotalScore = score;
-            });
+            _dbConnector.InsertData(id, gameId, score, (playerData, scr) => playerData.TotalScore = scr);
         }
     }
 
     public void SetGameTime(string id, float gameTime)
     {
-        PlayerData dataModel = GetPlayerData(id);
-        if (dataModel != null)
+        if (isConnected)
         {
-            _realm.Write(() =>
-            {
-                dataModel.GameTime = gameTime;
-            });
+            _dbConnector.InsertData(id, gameId, gameTime, (playerData, time) => playerData.GameTime = time);
+        }
+    }
+
+    public void SetDateTime(string id, string dateTime)
+    {
+        if (isConnected)
+        {
+            _dbConnector.InsertData(id, gameId, dateTime, (playerData, date) => playerData.DateTime = date);
+        }
+    }
+
+    public void SetGameCompleted(string id, bool completed)
+    {
+        if (isConnected)
+        {
+            _dbConnector.InsertData(id, gameId, completed, (playerData, completed) => playerData.Completed = completed);
         }
     }
 }
+

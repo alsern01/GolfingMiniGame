@@ -7,7 +7,7 @@ public class BombBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("HideBomb", 3.0f);
+        Invoke("HideBomb", 1.5f);
     }
 
     private void HideBomb()
