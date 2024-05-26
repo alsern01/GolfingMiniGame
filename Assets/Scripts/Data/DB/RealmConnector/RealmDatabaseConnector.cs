@@ -101,7 +101,7 @@ public class RealmDatabaseConnector
     public PlayerData GetPlayerData(string id, string gameId)
     {
         return _realm.All<PlayerData>().FirstOrDefault(
-            data => data.PlayerId == id && data.Name == gameId);
+            data => data.PlayerId == id && data.Name == gameId && !data.Completed);
     }
 
     /// <summary>

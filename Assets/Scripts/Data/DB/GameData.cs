@@ -38,6 +38,12 @@ public partial class PlayerData : IRealmObject
 
     [MapTo("totalSeries")]
     public int TotalSeries { get; set; }
+
+    [MapTo("dateTime")]
+    public string DateTime { get; set; }
+
+    [MapTo("completed")]
+    public bool Completed { get; set; }
 }
 
 public partial class RawInputData : IRealmObject

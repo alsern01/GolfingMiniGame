@@ -145,5 +145,21 @@ public class RealmController : MonoBehaviour
             _dbConnector.InsertData(id, gameId, gameTime, (playerData, time) => playerData.GameTime = time);
         }
     }
+
+    public void SetDateTime(string id, string dateTime)
+    {
+        if (isConnected)
+        {
+            _dbConnector.InsertData(id, gameId, dateTime, (playerData, date) => playerData.DateTime = date);
+        }
+    }
+
+    public void SetGameCompleted(string id, bool completed)
+    {
+        if (isConnected)
+        {
+            _dbConnector.InsertData(id, gameId, completed, (playerData, completed) => playerData.Completed = completed);
+        }
+    }
 }
 
