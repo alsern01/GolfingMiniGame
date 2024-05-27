@@ -19,4 +19,9 @@ public class EndGamePanel : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private void OnEnable()
+    {
+        GetComponent<AudioSource>().Play();
+    }
 }

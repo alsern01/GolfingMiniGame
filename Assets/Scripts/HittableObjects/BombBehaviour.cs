@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BombBehaviour : MonoBehaviour
 {
+    [SerializeField] private AudioClip bombSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,5 +14,7 @@ public class BombBehaviour : MonoBehaviour
     private void HideBomb()
     {
         GetComponent<Animator>().enabled = true;
+        GetComponent<AudioSource>().clip = bombSound;
+        GetComponent<AudioSource>().Play();
     }
 }

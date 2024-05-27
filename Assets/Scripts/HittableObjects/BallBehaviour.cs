@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallBehaviour : MonoBehaviour
@@ -9,9 +6,14 @@ public class BallBehaviour : MonoBehaviour
 
     private Animator animator;
 
+    [SerializeField] private AudioClip ballSound;
+    [SerializeField] private AudioClip bombSound;
+    private AudioSource audioSource;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         animator.enabled = false;
     }
 
@@ -32,10 +34,14 @@ public class BallBehaviour : MonoBehaviour
             if (pointsGiven > 0)
             {
                 GameManager.Instance.TotalBallHit++;
+                audioSource.clip = ballSound;
+                audioSource.Play();
             }
             else
             {
                 GameManager.Instance.TotalBombHit++;
+                audioSource.clip = bombSound;
+                audioSource.Play();
             }
         }
     }

@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     #region GAME CONFIG VALUES
     public string PlayerId { get; set; }
     public int numBallHit { get; private set; } = 0;
-    public int maxBalls { get; private set; } = 0;
-    public float angle { get; private set; } = 0f;
+    public int maxBalls { get; private set; } = 3;
+    public float angle { get; private set; } = 1.0f;
 
     private int maxRounds;
     private int rounds = 0;
@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
     {
         ballHit = true;
         numBallHit++;
+
     }
 
     public void StartRound()
